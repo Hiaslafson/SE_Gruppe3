@@ -1,0 +1,41 @@
+extends ../layout
+
+block content
+    h1.
+         #{title}
+    ul
+        - each event in events
+
+            p Name: #{event.name}
+            p Date: #{event.eventDate}
+            p info: #{event.info}
+            p type: #{event.type}
+            p _id: #{event._id}
+
+            table
+                thead
+                    tr
+                        th team1
+                        th team2
+                        th res1
+                        th res2
+                        th p1
+                        th p2
+                tbody
+                    each m in event.matches
+                        tr
+                            td=m.team1
+                            td=m.team2
+                            td=m.result1
+                            td=m.result2
+                            td=m.points1
+                            td=m.points2
+
+            form(action='/events/#{event._id}/edit',method='post',enctype='application/x-www-form-urlencoded')
+                input(type='hidden',value='DELETE',name='_method')
+                button(type='submit').
+                    Delete
+            p
+                a(href='/events/#{event._id}/edit') Edit
+            p
+                a(href='/events/#{event._id}') Show

@@ -10,13 +10,13 @@ express-node-mongo-skeleton was made to have a simple skeleton for a completed W
 - Navigate to `http://127.0.0.1:3000` to see the express.js welcome page
 
 ## Usage Instructions
-All of the MVC pieces are built, but are also rudimentary and not flashy. The root of our webapp goes to the express.js landing page, but there is a schema created for a new object called `blobs`. To access `blobs`, follow the route that is already in place by going to `http://127.0.0.1:3000/blobs`.
+All of the MVC pieces are built, but are also rudimentary and not flashy. The root of our webapp goes to the express.js landing page, but there is a schema created for a new object called `events`. To access `events`, follow the route that is already in place by going to `http://127.0.0.1:3000/events`.
 
-Add a new blob by going to `http://127.0.0.1:3000/blobs/new`. 
-<center><img src="https://s3.amazonaws.com/kennyonetime/blob_new.png" width="400"></center>
+Add a new event by going to `http://127.0.0.1:3000/events/new`. 
+<center><img src="https://s3.amazonaws.com/kennyonetime/event_new.png" width="400"></center>
 
-After submitting, this will take you back to the index page where you can now `Show` or `Edit` or `Delete` that blob record from the UI
-<center><img src="https://s3.amazonaws.com/kennyonetime/blob_all.png" width="600"></center>
+After submitting, this will take you back to the index page where you can now `Show` or `Edit` or `Delete` that event record from the UI
+<center><img src="https://s3.amazonaws.com/kennyonetime/event_all.png" width="600"></center>
 
 All of the REST pieces are baked in as well. You can test them using a multitude of different REST based tools.
 

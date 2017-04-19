@@ -1,0 +1,36 @@
+extends ../layout
+
+block content
+	h1.
+		Event ID #{event._id}
+	form(action='/events/#{event._id}/edit',method='post',name='updateevent',enctype='application/x-www-form-urlencoded')
+		p Name:
+			input#inputName(type='text', value='#{event.name}', name='name')
+		p EVENTDATE:
+			input#inputDob(type='date', value='#{eventeventDate}', name='eventDate')
+		p Info:
+			input#inputInfo(type='text', value='#{event.info}', name='info')
+		p Type:
+			input#inputType(type='text', value='#{event.type}', name='type')
+		p Matches:
+		each m in event.matches
+			p T1:
+				input#inputT1(type='text', value='#{m.team1}', name='team1')
+			p T2:
+				input#inputT2(type='text', value='#{m.team2}', name='team2')
+
+			p result1:
+				input#inputResult1(type='text', value='#{m.result1}', name='result1')
+
+			p result2:
+				input#inputResult2(type='text', value='#{m.result2}', name='result2')
+
+			p points1:
+				input#inputPoints1(type='text', value='#{m.points1}', name='points1')
+			p points2:
+				input#inputPoints2(type='text', value='#{m.points2}', name='points2')
+		p
+			input(type='hidden',value='PUT',name='_method')
+		p
+			button#btnSubmit(type='submit').
+				Update

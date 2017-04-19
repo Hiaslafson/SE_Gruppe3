@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+	h1.
+		#{title}
+	form#formAddEvent(name="addevent",method="post",action="/events")
+		p Name: 
+			input#inputName(type="text", placeholder="ex. Football tournament 1", name="name")
+		p EVENTDATE:
+			input#inputDob(type="date", name="eventDate")
+		p Info:
+			input#inputInfo(type='text', placeholder="ex. tournament for fun", name='info')
+		p Type:
+			input#inputType(type='text', placeholder="ex. football", name='type')
+		p Matches:
+		p T1:
+			input#inputT1(type='text', placeholder="fc vs fb", name='team1')
+		p T2:
+			input#inputT2(type='text', placeholder="fc vs fb", name='team2')
+
+		p result1:
+			input#inputResult1(type='text', placeholder="fc vs fb", name='result1')
+
+		p result2:
+			input#inputResult2(type='text', placeholder="fc vs fb", name='result2')
+
+		p points1:
+			input#inputPoints1(type='text', placeholder="fc vs fb", name='points1')
+		p points2:
+			input#inputPoints2(type='text', placeholder="fc vs fb", name='points2')
+		p
+			button#btnSubmit(type="submit") submit

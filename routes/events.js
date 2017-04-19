@@ -16,80 +16,103 @@ router.use(methodOverride(function(req, res){
       }
 }))
 
-//build the REST operations at the base for blobs
-//this will be accessible from http://127.0.0.1:3000/blobs if the default route for / is left unchanged
+//build the REST operations at the base for events
+//this will be accessible from http://127.0.0.1:3000/events if the default route for / is left unchanged
 router.route('/')
-    //GET all blobs
+    //GET all events
     .get(function(req, res, next) {
-        //retrieve all blobs from Monogo
-        mongoose.model('Blob').find({}, function (err, blobs) {
+        //retrieve all events from Monogo
+        mongoose.model('Event').find({}, function (err, events) {
               if (err) {
                   return console.error(err);
               } else {
                   //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
                   res.format({
-                      //HTML response will render the index.jade file in the views/blobs folder. We are also setting "blobs" to be an accessible variable in our jade view
+                      //HTML response will render the index.jade file in the views/events folder. We are also setting "events" to be an accessible variable in our jade view
+
                     html: function(){
-                        res.render('blobs/index', {
-                              title: 'All my Blobs',
-                              "blobs" : blobs
+
+                        res.render('events/index', {
+                              title: 'Events',
+                              "events" : events
                           });
                     },
-                    //JSON response will show all blobs in JSON format
+                    //JSON response will show all events in JSON format
                     json: function(){
-                        res.json(blobs);
+                        res.json(events);
                     }
                 });
               }     
         });
     })
-    //POST a new blob
+    //POST a new event
     .post(function(req, res) {
         // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
         var name = req.body.name;
-        var badge = req.body.badge;
-        var dob = req.body.dob;
-        var company = req.body.company;
-        var isloved = req.body.isloved;
+        var eventDate = req.body.eventDate;
+        var info = req.body.info;
+        var type = req.body.type;
+
+        //TODO gleich als liste übergeben
+        var team1 = req.body.team1;
+        var team2 = req.body.team2;
+        var result1= req.body.result1;
+        var result2= req.body.result2;
+        var points1= req.body.points1;
+        var points2= req.body.points2;
+
+        //TODO derzeit nur 1 match möglich
+        var matches = [{
+            team1: team1,
+            team2: team2,
+            result1: result1,
+            result2: result2,
+            points1: points1,
+            points2: points2}
+            ]
+
+        console.log(matches)
+
         //call the create function for our database
-        mongoose.model('Blob').create({
+        mongoose.model('Event').create({
             name : name,
-            badge : badge,
-            dob : dob,
-            isloved : isloved
-        }, function (err, blob) {
+            eventDate : eventDate,
+            type : type,
+            info : info,
+            matches : matches
+        }, function (err, event) {
               if (err) {
                   res.send("There was a problem adding the information to the database.");
               } else {
-                  //Blob has been created
-                  console.log('POST creating new blob: ' + blob);
+                  //Event has been created
+                  console.log('POST creating new event: ' + event);
                   res.format({
                       //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
                     html: function(){
                         // If it worked, set the header so the address bar doesn't still say /adduser
-                        res.location("blobs");
+                        res.location("events");
                         // And forward to success page
-                        res.redirect("/blobs");
+                        res.redirect("/events");
                     },
-                    //JSON response will show the newly created blob
+                    //JSON response will show the newly created event
                     json: function(){
-                        res.json(blob);
+                        res.json(event);
                     }
                 });
               }
         })
     });
 
-/* GET New Blob page. */
+/* GET New Event page. */
 router.get('/new', function(req, res) {
-    res.render('blobs/new', { title: 'Add New Blob' });
+    res.render('events/new', { title: 'Add New Event' });
 });
 
 // route middleware to validate :id
 router.param('id', function(req, res, next, id) {
     //console.log('validating ' + id + ' exists');
     //find the ID in the Database
-    mongoose.model('Blob').findById(id, function (err, blob) {
+    mongoose.model('Event').findById(id, function (err, event) {
         //if it isn't found, we are going to repond with 404
         if (err) {
             console.log(id + ' was not found');
@@ -107,7 +130,7 @@ router.param('id', function(req, res, next, id) {
         //if it is found we continue on
         } else {
             //uncomment this next line if you want to see every JSON document response for every GET/PUT/DELETE call
-            //console.log(blob);
+            //console.log(event);
             // once validation is done save the new item in the req
             req.id = id;
             // go to the next thing
@@ -118,22 +141,22 @@ router.param('id', function(req, res, next, id) {
 
 router.route('/:id')
   .get(function(req, res) {
-    mongoose.model('Blob').findById(req.id, function (err, blob) {
+    mongoose.model('Event').findById(req.id, function (err, event) {
       if (err) {
         console.log('GET Error: There was a problem retrieving: ' + err);
       } else {
-        console.log('GET Retrieving ID: ' + blob._id);
-        var blobdob = blob.dob.toISOString();
-        blobdob = blobdob.substring(0, blobdob.indexOf('T'))
+        console.log('GET Retrieving ID: ' + event._id);
+        var eventeventDate = event.eventDate.toISOString();
+        eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'))
         res.format({
           html: function(){
-              res.render('blobs/show', {
-                "blobdob" : blobdob,
-                "blob" : blob
+              res.render('events/show', {
+                "eventeventDate" : eventeventDate,
+                "event" : event
               });
           },
           json: function(){
-              res.json(blob);
+              res.json(event);
           }
         });
       }
@@ -141,52 +164,69 @@ router.route('/:id')
   });
 
 router.route('/:id/edit')
-	//GET the individual blob by Mongo ID
+	//GET the individual event by Mongo ID
 	.get(function(req, res) {
-	    //search for the blob within Mongo
-	    mongoose.model('Blob').findById(req.id, function (err, blob) {
+	    //search for the event within Mongo
+	    mongoose.model('Event').findById(req.id, function (err, event) {
 	        if (err) {
 	            console.log('GET Error: There was a problem retrieving: ' + err);
 	        } else {
-	            //Return the blob
-	            console.log('GET Retrieving ID: ' + blob._id);
-              var blobdob = blob.dob.toISOString();
-              blobdob = blobdob.substring(0, blobdob.indexOf('T'))
+	            //Return the event
+	            console.log('GET Retrieving ID: ' + event._id);
+              var eventeventDate = event.eventDate.toISOString();
+              eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'))
 	            res.format({
 	                //HTML response will render the 'edit.jade' template
 	                html: function(){
-	                       res.render('blobs/edit', {
-	                          title: 'Blob' + blob._id,
-                            "blobdob" : blobdob,
-	                          "blob" : blob
+	                       res.render('events/edit', {
+	                          title: 'Event' + event._id,
+                            "eventeventDate" : eventeventDate,
+	                          "event" : event
 	                      });
 	                 },
 	                 //JSON response will return the JSON output
 	                json: function(){
-	                       res.json(blob);
+	                       res.json(event);
 	                 }
 	            });
 	        }
 	    });
 	})
-	//PUT to update a blob by ID
+	//PUT to update a event by ID
 	.put(function(req, res) {
 	    // Get our REST or form values. These rely on the "name" attributes
 	    var name = req.body.name;
-	    var badge = req.body.badge;
-	    var dob = req.body.dob;
-	    var company = req.body.company;
-	    var isloved = req.body.isloved;
+	    var eventDate = req.body.eventDate;
+        var info = req.body.info;
+        var type = req.body.type;
+        //TODO gleich als liste übergeben
+        var team1 = req.body.team1;
+        var team2 = req.body.team2;
+        var result1= req.body.result1;
+        var result2= req.body.result2;
+        var points1= req.body.points1;
+        var points2= req.body.points2;
+
+        //TODO derzeit nur 1 match
+        var matches = [{
+            team1: team1,
+            team2: team2,
+            result1: result1,
+            result2: result2,
+            points1: points1,
+            points2: points2}
+        ]
 
 	    //find the document by ID
-	    mongoose.model('Blob').findById(req.id, function (err, blob) {
+	    mongoose.model('Event').findById(req.id, function (err, event) {
 	        //update it
-	        blob.update({
+	        event.update({
 	            name : name,
-	            badge : badge,
-	            dob : dob,
-	            isloved : isloved
-	        }, function (err, blobID) {
+	            eventDate : eventDate,
+                type : type,
+                info : info,
+                matches : matches
+	        }, function (err, eventID) {
 	          if (err) {
 	              res.send("There was a problem updating the information to the database: " + err);
 	          } 
@@ -194,40 +234,40 @@ router.route('/:id/edit')
 	                  //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
 	                  res.format({
 	                      html: function(){
-	                           res.redirect("/blobs/" + blob._id);
+	                           res.redirect("/events/" + event._id);
 	                     },
 	                     //JSON responds showing the updated values
 	                    json: function(){
-	                           res.json(blob);
+	                           res.json(event);
 	                     }
 	                  });
 	           }
 	        })
 	    });
 	})
-	//DELETE a Blob by ID
+	//DELETE a Event by ID
 	.delete(function (req, res){
-	    //find blob by ID
-	    mongoose.model('Blob').findById(req.id, function (err, blob) {
+	    //find event by ID
+	    mongoose.model('Event').findById(req.id, function (err, event) {
 	        if (err) {
 	            return console.error(err);
 	        } else {
 	            //remove it from Mongo
-	            blob.remove(function (err, blob) {
+	            event.remove(function (err, event) {
 	                if (err) {
 	                    return console.error(err);
 	                } else {
 	                    //Returning success messages saying it was deleted
-	                    console.log('DELETE removing ID: ' + blob._id);
+	                    console.log('DELETE removing ID: ' + event._id);
 	                    res.format({
 	                        //HTML returns us back to the main page, or you can create a success page
 	                          html: function(){
-	                               res.redirect("/blobs");
+	                               res.redirect("/events");
 	                         },
 	                         //JSON returns the item with the message that is has been deleted
 	                        json: function(){
 	                               res.json({message : 'deleted',
-	                                   item : blob
+	                                   item : event
 	                               });
 	                         }
 	                      });
