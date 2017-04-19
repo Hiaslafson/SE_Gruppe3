@@ -1,0 +1,13 @@
+{
+EventName: 'Fußball Turnier 1'
+Sportart: 'Fußball'
+Matches : [
+	{ Manschaft: 'Fc Blab' Manschaft: 'Manschaft 2' Ergebnis:'1:3' Punkte Manschaft A:'0' Punkte Manschaft B:'3' }
+	{ Manschaft: 'Fc Irgendwo' Manschaft: 'Manschaft 3' Ergebnis:'2:3' Punkte Manschaft A:'0' Punkte Manschaft B:'3'}
+]
+}
+
+
+
+ansehen ob mannschaft als objekt angelegt werden muss, oder ob gleich automatisch eine "tabelle" anlegt 
+Mannschaften: ['FC Blab' , 'Fc Irgendwo']
