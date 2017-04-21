@@ -4,16 +4,14 @@ var eventSchema = new mongoose.Schema({
   eventDate: { type: Date, default: Date.now },
   type: String,
   info: String,
-  matches:
+
+ matches:
         [
             {
                 team1: String,
                 team2: String,
                 result1: Number,
                 result2: Number,
-                points1: Number,
-                points2: Number,
-
             }
         ]
 

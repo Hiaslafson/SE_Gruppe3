@@ -1,0 +1,58 @@
+<!DOCTYPE>
+<html ng-app="myApp">
+<html >
+<head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <title>Test Title </title>
+    <meta charset="UTF-8">
+
+</head>
+
+<body>
+
+<div class="container" ng-controller="createEvent">
+
+
+    <div class="createEvent                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      ">
+        <h1>Create Event</h1>
+        <form>
+
+        <label>Event Name:</label>
+        <input type="text" id="inputEventName" name ="name"size="40" maxlength="250" class="form-control" placeholder="Event Name"
+               ng-model="name" required>
+        <label>Sportart:</label>
+        <input type="text" id="inputSportType" name="type" size="40" maxlength="250" class="form-control" placeholder="Sportart"
+               ng-model="type" required>
+        <label>Datum:</label>
+        <input type="text" id="eventDate" name="type" size="40" maxlength="250" class="form-control" placeholder="Datum"
+               ng-model="eventDate" required>
+        <label>Info:</label>
+        <input type="text" id="inputEventInfo" name="info" size="40" maxlength="250" class="form-control" placeholder="Event Info"
+               ng-model="info" required>
+
+<br>
+
+
+        <button class="btn btn-default" type="submit" ng-click="saveEvent()">Event erzeugen</button>
+
+        </form>
+
+
+    </div>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js">
+
+
+</script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="controllers/controller_createEvent.js"> </script>
+
+
+</body>
+</html>

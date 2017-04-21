@@ -22,29 +22,29 @@ router.route('/')
     //GET all events
     .get(function(req, res, next) {
         //retrieve all events from Monogo
+        console.log("I recived a get request");
         mongoose.model('Event').find({}, function (err, events) {
+
               if (err) {
                   return console.error(err);
               } else {
                   //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
                   res.format({
-                      //HTML response will render the index.jade file in the views/events folder. We are also setting "events" to be an accessible variable in our jade view
 
-                    html: function(){
-
-                        res.render('events/index', {
-                              title: 'Events',
-                              "events" : events
-                          });
-                    },
                     //JSON response will show all events in JSON format
                     json: function(){
+                        console.log(events);
                         res.json(events);
                     }
                 });
-              }     
+              }
         });
+
+
     })
+
+
+
     //POST a new event
     .post(function(req, res) {
         // Get values from POST request. These can be done through forms or REST calls. These rely on the "name" attributes for forms
@@ -54,21 +54,18 @@ router.route('/')
         var type = req.body.type;
 
         //TODO gleich als liste übergeben
+        //var matches= req.body.matches;
         var team1 = req.body.team1;
         var team2 = req.body.team2;
         var result1= req.body.result1;
         var result2= req.body.result2;
-        var points1= req.body.points1;
-        var points2= req.body.points2;
 
         //TODO derzeit nur 1 match möglich
         var matches = [{
             team1: team1,
             team2: team2,
             result1: result1,
-            result2: result2,
-            points1: points1,
-            points2: points2}
+            result2: result2}
             ]
 
         console.log(matches)
@@ -88,12 +85,7 @@ router.route('/')
                   console.log('POST creating new event: ' + event);
                   res.format({
                       //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
-                    html: function(){
-                        // If it worked, set the header so the address bar doesn't still say /adduser
-                        res.location("events");
-                        // And forward to success page
-                        res.redirect("/events");
-                    },
+
                     //JSON response will show the newly created event
                     json: function(){
                         res.json(event);
@@ -146,7 +138,7 @@ router.route('/:id')
         console.log('GET Error: There was a problem retrieving: ' + err);
       } else {
         console.log('GET Retrieving ID: ' + event._id);
-        var eventeventDate = event.eventDate.toISOString();
+        var eventeventDate = event.eventDate.toString();
         eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'))
         res.format({
           html: function(){

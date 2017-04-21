@@ -1,0 +1,51 @@
+<!DOCTYPE>
+<html ng-app="myApp">
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <title>Test Title </title>
+    <meta charset="UTF-8">
+</head>
+<body>
+
+<div class="container" ng-controller="appctrl">
+    <h1>Show Details</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Eventname</th>
+            <th>Sportart</th>
+            <th>Datum</th>
+            <th>Info</th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        <tr ng-repeat="event in events" ng-if="event.name">
+            <td><div ng-click="showDetails(event.name)">{{event.name}}</div></td>
+            <td>{{event.type}}</td>
+            <td>{{event.eventDate}}</td>
+            <td>{{event.info}}</td>
+
+        </tr>
+        </tbody>
+
+    </table>
+
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js">
+
+
+</script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="controllers/controller_index.js"> </script>
+
+</body>
+</html>
