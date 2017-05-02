@@ -1,12 +1,9 @@
 <div class="container">
-
-    <h1>Show Details</h1>
-    <p><div ng-click="showDetails_2()">tesetewst</div></p>
-    <!--
-
+    <h1>Eventindex</h1>
     <table class="table">
         <thead>
         <tr>
+            <th></th>
             <th>Eventname</th>
             <th>Sportart</th>
             <th>Datum</th>
@@ -16,8 +13,9 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="event in events" ng-if="event.name">
-            <td><div ng-click="showDetails(event.name)">{{event.name}}</div></td>
+        <tr ng-repeat="event in events">
+            <td><div ng-click="showDetailsPage(event._id)"><img src="/img/info_img.png" alt="Info-Symbol" style="width:50px;height:50px"></img></div></td>
+            <td>{{event.name}}</td>
             <td>{{event.type}}</td>
             <td>{{event.eventDate}}</td>
             <td>{{event.info}}</td>
@@ -26,6 +24,7 @@
         </tbody>
 
     </table>
-    -->
+
+    <button id="createEventPage" class="btn btn-default" ng-click="createEventPage()">Neues Event</button>
 
 </div>

@@ -5,7 +5,8 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('express-node-mongo-skeleton:server');
+//var debug = require('debug')('express-node-mongo-skeleton:server');
+var debug = require('debug')('myApp:server');
 var http = require('http');
 
 /**

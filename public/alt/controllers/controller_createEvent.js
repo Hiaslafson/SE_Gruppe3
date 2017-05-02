@@ -2,7 +2,7 @@
  * Created by MatthiasW on 20.04.2017.
  */
 var myApp = angular.module('myApp', []);
-myApp.controller('createEvent', ['$scope', '$http', function($scope, $http) {
+myApp.controller('controller_createEvent', ['$scope', '$http', function($scope, $http) {
     $scope.name = "";
     $scope.type = "";
     $scope.eventDate = "";

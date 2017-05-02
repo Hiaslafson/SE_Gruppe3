@@ -3,51 +3,41 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-
-    <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <title>Test Title </title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-route.min.js"></script>
+
+    <!--
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular-resource.min.js"></script>
+    -->
+
+    <script src="app.js"> </script>
+
+    <title>Index Side</title>
 </head>
 <body>
 
-<div class="container" ng-controller="appctrl">
-    <h1>Eventindex</h1>
-
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Eventname</th>
-            <th>Sportart</th>
-            <th>Datum</th>
-            <th>Info</th>
-        </tr>
-
-        </thead>
-
-        <tbody>
-        <tr ng-repeat="event in events">
-            <td><div ng-click="showDetails(event._id)">{{event.name}}</div></td>
-            <td>{{event.type}}</td>
-            <td>{{event.eventDate}}</td>
-            <td>{{event.info}}</td>
-
-        </tr>
-        </tbody>
-
-    </table>
-
-    <button id="createEvent" class="btn btn-default" ng-click="createEvent()">Neues Event</button>
-
-</div>
+    <br />
+    <div class="container">
+        <a href="#/">Back Index</a>
+        <a href="#allEvents">Show all Events</a>
+        <br />
+        <a href="#showDetails">Show Details</a>
+    </div>
+    <br />
+    <br />
 
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js">
+    <div ng-view></div>
 
+    <br />
+    <br />
+<footer>
+    <p align="center">TEST-FOOTER</p>
+</footer>
 
-</script>
-<script src="controllers/controller_index.js"> </script>
 
 </body>
 </html>
