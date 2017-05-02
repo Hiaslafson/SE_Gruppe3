@@ -1,8 +1,8 @@
 
 var myApp = angular.module('myApp', ['ngRoute']);
 
-myApp.config(['$routeProvider', function($routeProvider) {
-
+myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+    $locationProvider.hashPrefix('');
     $routeProvider
         .when('/allEvents', {
             templateUrl: 'allEvents.html',
@@ -12,8 +12,12 @@ myApp.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'showDetails.html',
             controller: 'controller_showDetails'
         })
+        .when('/createEvent', {
+            templateUrl: 'createEvent.html',
+            controller: 'controller_createEvent'
+        })
         .otherwise({
-            redirectTo: '/'
+            redirectTo: '/allEvents'
         });
 
 }]);
@@ -49,7 +53,7 @@ myApp.factory('myApp_Service', ['$rootScope', function($rootScope) {
 // ----------------------------
 // CONTROLLER
 // ----------------------------
-myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service', function($scope, $http, myApp_Service) {
+myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$location', function($scope, $http, myApp_Service, $location) {
 
     // get all Events
     $http.get('/events').then(function(response){
@@ -58,37 +62,38 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service', functi
     });
 
     // go to the
+
     $scope.createEventPage = function () {
-        window.location = '/createEvent.html';
+        //window.location = '/createEvent.html';
+        $location.path('createEvent');
     };
 
     $scope.showDetailsPage = function (response) {
+
+        $scope.single_event = response;
+        $scope.abc = 'df';
+
+        // get the JSON of one single event
+        $http.get('/events/'+ response).then(function(response){
+            $scope.event_id = response.data;
+            console.log($scope.event_id);
+        });
+
+        // go to the detailed page
+        //window.location = '/showDetails.html';
 
 
         (function () {
             myApp_Service.setTest('1234');
         })();
 
-
+        $location.path('showDetails');
         //window.location = '/showDetails.html';
-        /*
-        $scope.single_event = response;
-        $scope.abc = 'df';
-        /*
-         // get the JSON of one single event
-         $http.get('/events/'+ response).then(function(response){
-         $rootScope.event_id = response.data;
-         console.log($rootScope.event_id);
-         });
-
-        // go to the detailed page
-        window.location = '/showDetails.html';
-        */
     }
 
 }]);
 
-myApp.controller('controller_createEvent', ['$scope', '$http', function($scope, $http) {
+myApp.controller('controller_createEvent', ['$scope', '$http', '$location', function($scope, $http, $location) {
     $scope.name = "";
     $scope.type = "";
     $scope.eventDate = "";
@@ -105,7 +110,8 @@ myApp.controller('controller_createEvent', ['$scope', '$http', function($scope, 
             console.log("Hello 2");
             console.log('RegSuc: ' + response.data);
             //   if (response.data.success) {
-            window.location = '/index.html';
+            //window.location = '/index.html';
+                $location.path('allEvents');
             // } else {
             //     $scope.error = 'Fehler: ' + response.data.error;
             //}
@@ -119,6 +125,9 @@ myApp.controller('controller_createEvent', ['$scope', '$http', function($scope, 
 
 
 myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', function($scope, $http, myApp_Service) {
+
+
+
 
     $scope.showDetails_2 = function () {
 
