@@ -1,31 +1,29 @@
 <div>
 
-    <h1>Show Details</h1>
-    <p><div ng-click="showDetails_2()">tesetewst</div></p>
-
+    <h1>MTD - Event Details</h1>
 
     <table class="table">
         <thead>
-        <tr>
-            <th>Eventname</th>
-            <th>Sportart</th>
-            <th>Datum</th>
-            <th>Info</th>
-        </tr>
-
+            <tr>
+                <th>Eventname</th>
+                <th>Sportart</th>
+                <th>Datum</th>
+                <th>Info</th>
+            </tr>
         </thead>
 
         <tbody>
-        <tr ng-repeat="event in events" ng-if="event.name">
-            <td><div ng-click="showDetails(event.name)">{{event.name}}</div></td>
-            <td>{{event.type}}</td>
-            <td>{{event.eventDate}}</td>
-            <td>{{event.info}}</td>
-
-        </tr>
+            <tr>
+                <td>{{detailed_name}}</td>
+                <td>{{detailed_type}}</td>
+                <td>{{detailed_eventDate}}</td>
+                <td>{{detailed_info}}</td>
+            </tr>
         </tbody>
 
     </table>
 
+    <button id="editEvent" class="btn btn-default" ng-click="missing1()">Event bearbeiten</button>
+    <button id="deleteEvent" class="btn btn-default" ng-click="missing2()">Event löschen</button>
 
 </div>

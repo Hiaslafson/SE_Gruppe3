@@ -1,14 +1,16 @@
 
 var myApp = angular.module('myApp', ['ngRoute']);
 
-myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
+myApp.config(['$routeProvider', '$locationProvider',
+    function($routeProvider, $locationProvider) {
+
     $locationProvider.hashPrefix('');
     $routeProvider
         .when('/allEvents', {
             templateUrl: 'pages/allEvents.html',
             controller: 'controller_index'
         })
-        .when('/showDetails', {
+        .when('/showDetails/:param', {
             templateUrl: 'pages/showDetails.html',
             controller: 'controller_showDetails'
         })
@@ -27,7 +29,8 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
 // ----------------------------
 // SERVICE
 // ----------------------------
-myApp.factory('myApp_Service', ['$rootScope', function($rootScope) {
+myApp.factory('myApp_Service', ['$rootScope',
+    function($rootScope) {
 
     this.events = [];
     $rootScope.selected_event = '';
@@ -53,7 +56,8 @@ myApp.factory('myApp_Service', ['$rootScope', function($rootScope) {
 // ----------------------------
 // CONTROLLER
 // ----------------------------
-myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$location', function($scope, $http, myApp_Service, $location) {
+myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$location',
+    function($scope, $http, myApp_Service, $location) {
 
     // get all Events
     $http.get('/events').then(function(response){
@@ -73,27 +77,19 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
         $scope.single_event = response;
         $scope.abc = 'df';
 
-        // get the JSON of one single event
-        $http.get('/events/'+ response).then(function(response){
-            $scope.event_id = response.data;
-            console.log($scope.event_id);
-        });
-
-        // go to the detailed page
-        //window.location = '/showDetails.html';
-
-
         (function () {
             myApp_Service.setTest('1234');
         })();
 
-        $location.path('showDetails');
-        //window.location = '/showDetails.html';
+        $location.path('showDetails/' + response);
+
     }
 
 }]);
 
-myApp.controller('controller_createEvent', ['$scope', '$http', '$location', function($scope, $http, $location) {
+myApp.controller('controller_createEvent', ['$scope', '$http', '$location',
+    function($scope, $http, $location) {
+
     $scope.name = "";
     $scope.type = "";
     $scope.eventDate = "";
@@ -124,9 +120,26 @@ myApp.controller('controller_createEvent', ['$scope', '$http', '$location', func
 }]);
 
 
-myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', function($scope, $http, myApp_Service) {
+myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', '$routeParams',
+    function($scope, $http, myApp_Service, $routeParams) {
 
+    // saves the id of the selected event into $scope.param
+    $scope.param = $routeParams.param;
 
+    $scope.detailed_name = "1";
+    $scope.detailed_type = "";
+    $scope.detailed_eventDate = "";
+    $scope.detailed_info = "";
+
+    // get the JSON of one single event
+    $http.get('/events/'+ $scope.param).then(function(response){
+        $scope.detailed_event_object = response.data;
+        console.log($scope.detailed_event_object);
+        $scope.detailed_name = $scope.detailed_event_object.name;
+        $scope.detailed_type = $scope.detailed_event_object.type;
+        $scope.detailed_eventDate = $scope.detailed_event_object.eventDate;
+        $scope.detailed_info = $scope.detailed_event_object.info;
+    });
 
 
     $scope.showDetails_2 = function () {

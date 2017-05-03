@@ -1,6 +1,6 @@
 <div>
 
-    <h1>Eventindex</h1>
+    <h1>MTD - All Events</h1>
     <table class="table">
         <thead>
         <tr>
@@ -14,14 +14,13 @@
         </thead>
 
         <tbody>
-        <tr ng-repeat="event in events">
-            <td><div ng-click="showDetailsPage(event._id)"><img src="/img/info_img.png" alt="Info-Symbol" style="width:50px;height:50px"></img></div></td>
-            <td>{{event.name}}</td>
-            <td>{{event.type}}</td>
-            <td>{{event.eventDate}}</td>
-            <td>{{event.info}}</td>
-
-        </tr>
+            <tr ng-repeat="event in events">
+                <td><div ng-click="showDetailsPage(event._id)"><img src="/img/info_img.png" alt="Info-Symbol" style="width:50px;height:50px"></img></div></td>
+                <td>{{event.name}}</td>
+                <td>{{event.type}}</td>
+                <td>{{event.eventDate}}</td>
+                <td>{{event.info}}</td>
+            </tr>
         </tbody>
 
     </table>
