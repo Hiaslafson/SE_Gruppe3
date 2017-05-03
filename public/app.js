@@ -5,15 +5,15 @@ myApp.config(['$routeProvider', '$locationProvider', function($routeProvider, $l
     $locationProvider.hashPrefix('');
     $routeProvider
         .when('/allEvents', {
-            templateUrl: 'allEvents.html',
+            templateUrl: 'pages/allEvents.html',
             controller: 'controller_index'
         })
         .when('/showDetails', {
-            templateUrl: 'showDetails.html',
+            templateUrl: 'pages/showDetails.html',
             controller: 'controller_showDetails'
         })
         .when('/createEvent', {
-            templateUrl: 'createEvent.html',
+            templateUrl: 'pages/createEvent.html',
             controller: 'controller_createEvent'
         })
         .otherwise({

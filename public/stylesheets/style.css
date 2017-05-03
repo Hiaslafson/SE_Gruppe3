@@ -1,8 +1,34 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+
+.navbar {
+  margin-bottom: 0;
+  border-radius: 0;
 }
 
-a {
-  color: #00B7FF;
+.row.content {
+  height: 450px;
+}
+
+.sidenav {
+  padding-top: 20px;
+  background-color: #f1f1f1;
+  height: 100%;
+}
+
+footer {
+  background-color: #555;
+  color: white;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+@media screen and (max-width: 767px) {
+  .sidenav {
+    height: auto;
+    padding: 15px;
+  }
+  .row.content {height:auto;}
+}
+
+.angular-view-style {
+
 }
