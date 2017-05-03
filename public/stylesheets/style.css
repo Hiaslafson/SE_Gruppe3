@@ -1,3 +1,8 @@
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
 
 .navbar {
   margin-bottom: 0;
@@ -32,3 +37,4 @@ footer {
 .angular-view-style {
 
 }
+

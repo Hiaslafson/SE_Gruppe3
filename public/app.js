@@ -142,6 +142,12 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
     });
 
 
+    $scope.delete_selected_event = function() {
+        $http.delete('/events', $scope.param).then(function(response){
+            console.log('success');
+        });
+    };
+
     $scope.showDetails_2 = function () {
 
         (function () {
