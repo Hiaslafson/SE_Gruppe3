@@ -18,6 +18,10 @@ myApp.config(['$routeProvider', '$locationProvider',
             templateUrl: 'pages/createEvent.html',
             controller: 'controller_createEvent'
         })
+        .when('/editEvent/:param', {
+            templateUrl: 'pages/editEvent.html',
+            controller: 'controller_editEvent'
+        })
         .otherwise({
             redirectTo: '/allEvents'
         });
@@ -119,6 +123,53 @@ myApp.controller('controller_createEvent', ['$scope', '$http', '$location',
 
 }]);
 
+myApp.controller('controller_editEvent', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location',
+    function($scope, $http, myApp_Service, $routeParams, $location) {
+
+
+        // saves the id of the selected event into $scope.param
+        $scope.param = $routeParams.param;
+
+        $scope.detailed_name = "1";
+        $scope.detailed_type = "";
+        $scope.detailed_eventDate = "";
+        $scope.detailed_info = "";
+
+        // get the JSON of one sin'$location'gle event
+        $http.get('/events/'+ $scope.param).then(function(response){
+            console.log('get PARAM: ' + $scope.param);
+            $scope.detailed_event_object = response.data;
+            console.log($scope.detailed_event_object);
+            $scope.detailed_name = $scope.detailed_event_object.name;
+            $scope.detailed_type = $scope.detailed_event_object.type;
+            $scope.detailed_eventDate = $scope.detailed_event_object.eventDate;
+            $scope.detailed_info = $scope.detailed_event_object.info;
+
+        });
+
+        $scope.saveEditEvent = function () {
+
+            console.log("Save edit new event: 1");
+            var jsonTest = JSON.stringify({ name: $scope.detailed_name, type: $scope.detailed_type, eventDate: $scope.detailed_eventDate, info: $scope.detailed_info});
+            console.log(jsonTest);
+
+            $http.put('/events/' + $scope.param, jsonTest).then(function (response) {
+                console.log("Save new event: 2");
+                console.log('RegSuc: ' + response.data);
+                //   if (response.data.success) {
+                //window.location = '/index.html';
+                $location.path('allEvents');
+                // } else {
+                //     $scope.error = 'Fehler: ' + response.data.error;
+                //}
+            });
+
+
+        }
+
+
+}]);
+
 
 myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location',
     function($scope, $http, myApp_Service, $routeParams, $location) {
@@ -142,14 +193,10 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
         $scope.detailed_info = $scope.detailed_event_object.info;
     });
 
-
-
-
     $scope.delete_selected_event = function() {
-       
+
         console.log('delete PARAM: ' + $scope.param);
-        //$http.delete('/events/' + $scope.param, $scope.param).then(function(response){
-        $http.delete('/events', JSON.stringify($scope.param)).then(function(response){
+        $http.delete('/events/' + $scope.param).then(function(response){
 
             console.log('success');
             $location.path('allEvents');
@@ -161,25 +208,10 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
     };
 
     $scope.edit_selected_event = function() {
-            console.log('TEST: edit');
-            console.log('edit PARAM: ' + $scope.param);
-//        $http.delete('/events/' + $scope.param, $scope.param).then(function(response){
-            /*$http.delete($scope.param).then(function(response){
-                console.log('success');
-                $location.path('allEvents');
-            });
-            */
+        console.log('edit PARAM: ' + $scope.param);
+        $location.path('editEvent/' + $scope.param);
+
     };
-
-    $scope.showDetails_2 = function () {
-
-        (function () {
-            myApp_Service.getTest(function(data) {
-                console.log(data);
-            });
-        })();
-
-    }
 
 }]);
 

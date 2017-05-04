@@ -133,6 +133,7 @@ router.param('id', function(req, res, next, id) {
 
 router.route('/:id')
   .get(function(req, res) {
+      console.log('TEST1234');
     mongoose.model('Event').findById(req.id, function (err, event) {
       if (err) {
         console.log('GET Error: There was a problem retrieving: ' + err);
@@ -154,6 +155,94 @@ router.route('/:id')
       }
     });
   });
+
+router.route('/:id')
+//PUT to update a event by ID
+.put(function(req, res) {
+    // Get our REST or form values. These rely on the "name" attributes
+    var name = req.body.name;
+    var eventDate = req.body.eventDate;
+    var info = req.body.info;
+    var type = req.body.type;
+    //TODO gleich als liste übergeben
+    var team1 = req.body.team1;
+    var team2 = req.body.team2;
+    var result1= req.body.result1;
+    var result2= req.body.result2;
+    var points1= req.body.points1;
+    var points2= req.body.points2;
+
+    //TODO derzeit nur 1 match
+    var matches = [{
+        team1: team1,
+        team2: team2,
+        result1: result1,
+        result2: result2,
+        points1: points1,
+        points2: points2}
+    ]
+
+    //find the document by ID
+    mongoose.model('Event').findById(req.id, function (err, event) {
+        //update it
+        event.update({
+            name : name,
+            eventDate : eventDate,
+            type : type,
+            info : info,
+            matches : matches
+        }, function (err, eventID) {
+            if (err) {
+                res.send("There was a problem updating the information to the database: " + err);
+            }
+            else {
+                //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                res.format({
+                    html: function(){
+                        res.redirect("/events/" + event._id);
+                    },
+                    //JSON responds showing the updated values
+                    json: function(){
+                        res.json(event);
+                    }
+                });
+            }
+        })
+    });
+});
+
+router.route('/:id')
+//DELETE a Event by ID
+    .delete(function (req, res){
+        console.log('find event by ID:' + req.id);
+        mongoose.model('Event').findById(req.id, function (err, event) {
+            if (err) {
+                return console.error(err);
+            } else {
+                //remove it from Mongo
+                event.remove(function (err, event) {
+                    if (err) {
+                        return console.error(err);
+                    } else {
+                        //Returning success messages saying it was deleted
+                        console.log('DELETE removing ID: ' + event._id);
+                        res.format({
+                            //HTML returns us back to the main page, or you can create a success page
+                            html: function(){
+                                res.redirect("/events");
+                            },
+                            //JSON returns the item with the message that is has been deleted
+                            json: function(){
+                                res.json({message : 'deleted',
+                                    item : event
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
 
 router.route('/:id/edit')
 	//GET the individual event by Mongo ID
@@ -184,89 +273,7 @@ router.route('/:id/edit')
 	        }
 	    });
 	})
-	//PUT to update a event by ID
-	.put(function(req, res) {
-	    // Get our REST or form values. These rely on the "name" attributes
-	    var name = req.body.name;
-	    var eventDate = req.body.eventDate;
-        var info = req.body.info;
-        var type = req.body.type;
-        //TODO gleich als liste übergeben
-        var team1 = req.body.team1;
-        var team2 = req.body.team2;
-        var result1= req.body.result1;
-        var result2= req.body.result2;
-        var points1= req.body.points1;
-        var points2= req.body.points2;
 
-        //TODO derzeit nur 1 match
-        var matches = [{
-            team1: team1,
-            team2: team2,
-            result1: result1,
-            result2: result2,
-            points1: points1,
-            points2: points2}
-        ]
 
-	    //find the document by ID
-	    mongoose.model('Event').findById(req.id, function (err, event) {
-	        //update it
-	        event.update({
-	            name : name,
-	            eventDate : eventDate,
-                type : type,
-                info : info,
-                matches : matches
-	        }, function (err, eventID) {
-	          if (err) {
-	              res.send("There was a problem updating the information to the database: " + err);
-	          } 
-	          else {
-	                  //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
-	                  res.format({
-	                      html: function(){
-	                           res.redirect("/events/" + event._id);
-	                     },
-	                     //JSON responds showing the updated values
-	                    json: function(){
-	                           res.json(event);
-	                     }
-	                  });
-	           }
-	        })
-	    });
-	})
-	//DELETE a Event by ID
-	.delete(function (req, res){
-        console.log('find event by ID:' + req.id);
-	    mongoose.model('Event').findById(req.id, function (err, event) {
-	        if (err) {
-	            return console.error(err);
-	        } else {
-	            //remove it from Mongo
-	            event.remove(function (err, event) {
-	                if (err) {
-	                    return console.error(err);
-	                } else {
-	                    //Returning success messages saying it was deleted
-	                    console.log('DELETE removing ID: ' + event._id);
-	                    res.format({
-	                        //HTML returns us back to the main page, or you can create a success page
-	                          html: function(){
-	                               res.redirect("/events");
-	                         },
-	                         //JSON returns the item with the message that is has been deleted
-	                        json: function(){
-	                               res.json({message : 'deleted',
-	                                   item : event
-	                               });
-	                         }
-	                      });
-	                }
-	            });
-	        }
-	    });
-	});
 
 module.exports = router;
