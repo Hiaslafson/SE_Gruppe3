@@ -239,7 +239,7 @@ router.route('/:id/edit')
 	})
 	//DELETE a Event by ID
 	.delete(function (req, res){
-	    //find event by ID
+        console.log('find event by ID:' + req.id);
 	    mongoose.model('Event').findById(req.id, function (err, event) {
 	        if (err) {
 	            return console.error(err);

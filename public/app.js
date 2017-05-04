@@ -120,8 +120,8 @@ myApp.controller('controller_createEvent', ['$scope', '$http', '$location',
 }]);
 
 
-myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', '$routeParams',
-    function($scope, $http, myApp_Service, $routeParams) {
+myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location',
+    function($scope, $http, myApp_Service, $routeParams, $location) {
 
     // saves the id of the selected event into $scope.param
     $scope.param = $routeParams.param;
@@ -143,14 +143,32 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
     });
 
 
+
+
     $scope.delete_selected_event = function() {
-        console.log('TEST: Del');
+       
         console.log('delete PARAM: ' + $scope.param);
-//        $http.delete('/events/' + $scope.param, $scope.param).then(function(response){
-        $http.delete('/events/' + $scope.param).then(function(response){
+        //$http.delete('/events/' + $scope.param, $scope.param).then(function(response){
+        $http.delete('/events', JSON.stringify($scope.param)).then(function(response){
+
             console.log('success');
             $location.path('allEvents');
+        } ,
+        function (response) {
+        // this function handles error
+            console.log('error');
         });
+    };
+
+    $scope.edit_selected_event = function() {
+            console.log('TEST: edit');
+            console.log('edit PARAM: ' + $scope.param);
+//        $http.delete('/events/' + $scope.param, $scope.param).then(function(response){
+            /*$http.delete($scope.param).then(function(response){
+                console.log('success');
+                $location.path('allEvents');
+            });
+            */
     };
 
     $scope.showDetails_2 = function () {
