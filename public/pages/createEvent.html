@@ -1,5 +1,6 @@
 <div>
-        <h1>MTD - Create Event/h1>
+
+        <h1>MTD - Create Event</h1>
         <form>
 
         <label>Event Name:</label>
@@ -9,15 +10,19 @@
         <input type="text" id="inputSportType" name="type" size="40" maxlength="250" class="form-control" placeholder="Sportart"
                ng-model="type" required>
         <label>Datum:</label>
-        <input type="text" id="eventDate" name="type" size="40" maxlength="250" class="form-control" placeholder="Datum"
-               ng-model="eventDate" required>
-        <label>Info:</label>
-        <input type="text" id="inputEventInfo" name="info" size="40" maxlength="250" class="form-control" placeholder="Event Info"
-               ng-model="info" required>
+        <!-- TODO: <input type="text" id="eventDate" name="type" size="40" maxlength="250" class="form-control" placeholder="Datum"-->
+               <!--ng-model="eventDate" required>-->
+                <!-- TODO: zeigt immt der das richtige datum?-->
+                <input type="datetime-local" id="eventDate" class="form-control" placeholder="Datum"
+                       ng-model="eventDate" required>
 
-<br />
-        <button class="btn btn-default" type="submit" ng-click="saveEvent()">Event erzeugen</button>
+                <label>Info:</label>
+                <input type="text" id="inputEventInfo" name="info" size="40" maxlength="250" class="form-control" placeholder="Event Info"
+                       ng-model="info" required>
 
-        </form>
+        <br />
+                <button class="btn btn-default" type="submit" ng-click="saveEvent()">Event erzeugen</button>
 
-</div>
+                </form>
+
+        </div>

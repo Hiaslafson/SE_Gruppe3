@@ -98,12 +98,12 @@ myApp.controller('controller_createEvent', ['$scope', '$http', '$location',
 
     $scope.saveEvent = function () {
 
-        console.log("Hello 1");
+        console.log("Save new event: 1");
         var jsonTest = JSON.stringify({ name: $scope.name, type: $scope.type, eventDate: $scope.eventDate, info: $scope.info});
         console.log(jsonTest);
 
         $http.post('/events', jsonTest).then(function (response) {
-            console.log("Hello 2");
+            console.log("Save new event: 2");
             console.log('RegSuc: ' + response.data);
             //   if (response.data.success) {
             //window.location = '/index.html';
@@ -133,6 +133,7 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
 
     // get the JSON of one single event
     $http.get('/events/'+ $scope.param).then(function(response){
+        console.log('get PARAM: ' + $scope.param);
         $scope.detailed_event_object = response.data;
         console.log($scope.detailed_event_object);
         $scope.detailed_name = $scope.detailed_event_object.name;
@@ -143,8 +144,12 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
 
 
     $scope.delete_selected_event = function() {
-        $http.delete('/events', $scope.param).then(function(response){
+        console.log('TEST: Del');
+        console.log('delete PARAM: ' + $scope.param);
+//        $http.delete('/events/' + $scope.param, $scope.param).then(function(response){
+        $http.delete('/events/' + $scope.param).then(function(response){
             console.log('success');
+            $location.path('allEvents');
         });
     };
 
