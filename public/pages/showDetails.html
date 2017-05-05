@@ -5,73 +5,151 @@
 <div class="container-fluid text-center" align="center">
     <div class="row content" align="center">
 
-    <h1>MTD - Event Details</h1>
-        <b>Eventname: {{detailed_name}}</b> <p>{{detailed_type}}</p>
+        <h1>MTD - Event Details</h1>
 
         <div class="col-md-2 sidenav">
             <div class="well">
-               <table ng-repeat="match in detailed_matches">
-                   <thead><th>Überblick Mannschaften</th></thead>
-                   <tr><td>&nbsp</td></tr>
-                  <tr >
 
-                      <td>{{match.team1}}</td>
-                   </tr>
-               <tr>
-                   <td>{{match.team2}}</td>
-               </tr>
-               </table>
+
+                <table>
+                    <thead><th>{{detailed_name}}</th></thead>
+                    <tr>
+                        <td>&nbsp</td>
+                    </tr>
+                    <tr>
+                        <td>Sportart: {{detailed_type}}</td>
+                    </tr>
+                    <tr>
+                        <td>Datum: {{detailed_eventDate}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Info: {{detailed_info}}</td>
+                    </tr>
+                    <tr>
+                        <td>&nbsp</td>
+                    </tr>
+                   <td><button id="editEvent" class="btn btn-default" ng-click="edit_selected_event()">Event bearbeiten</button>
+                    <button id="deleteEvent" class="btn btn-default" ng-click="delete_selected_event()">Event löschen</button>
+                   </td>
+
+                    </tr>
+                </table>
+
             </div>
+
         </div>
 
         <div class="col-md-8 text-left angular-view-style" align="center">
 
 
 
-        <table class="table">
-        <thead>
-            <tr>
-                <th>Mannschaft 1</th>
-                <th>Mannschaft 2</th>
-                <th>Ergebnis</th>
-                <th>Ergebnis</th>
-            </tr>
-        </thead>
+            <table class="table" ng-if="detailed_type == 'Fußball'">
+                <thead>
+                <tr>
+                    <th>Mannschaft 1</th>
+                    <th>Mannschaft 2</th>
+                    <th>&nbsp</th>
+                    <th align="center">Ergebnis</th>
 
-        <tbody>
-            <tr ng-repeat="match in detailed_matches">
-                <td><input type="text" id="inputSportType" name="type" size="40" maxlength="250" class="form-control" placeholder="Sportart"
-                    ng-model="match.team1" required></td>
-                <td>{{match.team2}}</td>
-                <td>{{match.result1}}</td>
-                <td>{{match.result2}}</td>
-                <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1)">Match speichern</button></td>
-            </tr>
-            <tr>
-                <td><button id="addMatch" class="btn btn-default" ng-click="addMatch()">Match hinzufügen</button>
-                </td>
-            </tr>
-        </tbody>
+                </tr>
+                </thead>
 
-    </table>
+                <tbody>
+                <tr ng-repeat="match in detailed_matches">
+                    <td><input type="text" id="team1" name="type" size="30" maxlength="250" class="form-control" placeholder="Sportart"
+                               ng-model="match.team1" required></td>
+                    <td><input type="text" id="team2" name="type" size="30" maxlength="250" class="form-control" placeholder="Sportart"
+                               ng-model="match.team2" required></td>
+                    <td><input type="text" id="result1" name="type" size="10" maxlength="250" class="form-control" placeholder="Sportart"
+                               ng-model="match.result1" required> </td>
+                    <td align="center"> : </td>
+                    <td><input type="text" id="result2" name="type" size="10" maxlength="250" class="form-control" placeholder="Sportart"
+                               ng-model="match.result2" required></td>
+                    <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match speichern</button></td>
+                </tr>
+                <tr>
+                    <td><button id="addMatch" class="btn btn-default" ng-click="addMatch()">Match hinzufügen</button>
+                    </td>
+                </tr>
+                </tbody>
+
+            </table>
+
+            <table class="table"  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
+
+                <thead>
+                <tr>
+                    <th>Fahrer</th>
+                    <th>Startnummer</th>
+                    <th>Fahrtzeit</th>
+
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr ng-repeat="match in detailed_matches">
+                    <td><input type="text" id="skiFahrer" name="type" size="40" maxlength="250" class="form-control" placeholder=""
+                               ng-model="match.team1" required></td>
+                    <td><input type="text" id="startNummer" name="type" size="10" maxlength="250" class="form-control" placeholder=""
+                               ng-model="match.result1" required></td>
+                    <td><input type="text" id="fahrtZeit" name="type" size="20" maxlength="250" class="form-control" placeholder=""
+                               ng-model="match.team2" required></td>
+                    <td> <button id="deleteSki" class="btn btn-default" ng-click="delete_selected_match(match._id)">Fahrer löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Fahrer speichern</button></td>
+                </tr>
+                <tr>
+                    <td><button id="addSki" class="btn btn-default" ng-click="addMatch()">Fahrer hinzufügen</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
 
 
 
-    <button id="editEvent" class="btn btn-default" ng-click="edit_selected_event()">Event bearbeiten</button>
-    <button id="deleteEvent" class="btn btn-default" ng-click="delete_selected_event()">Event löschen</button>
-
-</div>
 
 
-<!-- RIGHT -->
-   <div class="col-md-2 sidenav">
-        <div class="well">
-            <p>STATISTIK</p>
-            <p>Tabelle</p>
-            <p>.......</p>
-            <p>.......</p>
         </div>
 
-    </div>
+
+        <!-- RIGHT -->
+        <div class="col-md-2 sidenav">
+            <div class="well">
+
+
+
+
+
+                <table ng-if="detailed_type == 'Fußball'">
+                    <thead><th>Überblick Mannschaften</th></thead>
+                    <tr><td>&nbsp</td></tr>
+                    <tr ng-repeat="match in detailed_matches" >
+
+                        <td>{{match.team1}}</td>
+                    </tr>
+                    <tr>
+                        <td>{{match.team2}}</td>
+                    </tr>
+                </table>
+
+
+                <table  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
+                    <thead><th>Überblick Fahrer</th></thead>
+                    <tr><td>&nbsp</td></tr>
+                    <tr ng-repeat="match in detailed_matches">
+
+                        <td>{{match.team1}}</td>
+                    </tr>
+                </table>
+            </div>
+                <br>
+                <div class="well">
+
+                <p>STATISTIK</p>
+                <p>Tabelle</p>
+                <p>.......</p>
+                <p>.......</p>
+            </div>
+
+        </div>
 
     </div>  </div>
