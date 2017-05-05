@@ -45,7 +45,7 @@
                 <td>{{match.team2}}</td>
                 <td>{{match.result1}}</td>
                 <td>{{match.result2}}</td>
-                <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id)">Match speichern</button></td>
+                <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1)">Match speichern</button></td>
             </tr>
             <tr>
                 <td><button id="addMatch" class="btn btn-default" ng-click="addMatch()">Match hinzufügen</button>

@@ -39,11 +39,7 @@ router.route('/')
                 });
               }
         });
-
-
     })
-
-
 
     //POST a new event
     .post(function(req, res) {
@@ -53,30 +49,12 @@ router.route('/')
         var info = req.body.info;
         var type = req.body.type;
 
-        //TODO gleich als liste übergeben
-        //var matches= req.body.matches;
-        var team1 = "Test1 Manschaft";//req.body.team1;
-        var team2 = "Test 2 Manschaft";req.body.team2;
-        var result1= "2"; req.body.result1;
-        var result2= "0";req.body.result2;
-
-        //TODO derzeit nur 1 match möglich
-        var matches = [{
-            team1: team1,
-            team2: team2,
-            result1: result1,
-            result2: result2}
-            ]
-
-        console.log(matches)
-
         //call the create function for our database
         mongoose.model('Event').create({
             name : name,
             eventDate : eventDate,
             type : type,
             info : info,
-            matches : matches
         }, function (err, event) {
               if (err) {
                   res.send("There was a problem adding the information to the database.");
@@ -139,7 +117,12 @@ router.route('/:id')
         console.log('GET Error: There was a problem retrieving: ' + err);
       } else {
         console.log('GET Retrieving ID: ' + event._id);
-        var eventeventDate = event.eventDate.toString();
+        try {
+            var eventeventDate = event.eventDate.toString();
+        } catch (err) {
+            var eventeventDate = '';
+        }
+
         eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'))
         res.format({
           html: function(){
@@ -212,16 +195,128 @@ router.route('/:id')
     });
 });
 
-//TODO THOMAS: del, put, post
-router.route('/:id/matches')
-    .delete(function (req, res){
-        //find by id event --> find by id match --> delete
-        console.log("Hallo ich werde aufgerufen");
-    })
-
+//TODO delete by id vom match is ned gaunga
+router.route('/:id/deleteMatches')
     .post(function (req, res){
         //find by id event --> find by id match --> delete
-        console.log("Hallo ich werde gepostet");
+        console.log("delete matches backend called, match: " + req.id);
+        console.log('find event by ID:' + req.body.eventId);
+
+        mongoose.model('Event').findById(req.body.eventId, function (err, event) {
+            if (err) {
+                return console.error(err);
+            } else {
+                //remove it from Mongo
+                event.matches.id(req.id).remove();
+                event.save(function (err) {
+                    console.log(err);
+                    if (err) {
+                        return err;
+                    }else {
+                        //Event has been created
+                        console.log('the sub-doc was removed');
+                        res.format({
+                            //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
+
+                            //JSON response will show the newly created event
+                            json: function(){
+                                res.json(event);
+                            }
+                        });
+                    }
+
+                });
+            }
+        });
+
+});
+
+router.route('/:id/matches')
+    //add match
+    .post(function (req, res){
+        //find by id event --> find by id match --> delete
+        console.log("post matches backend called, matchID:" + req.id);
+
+        var team1 = req.body.team1;
+        var team2 = req.body.team2;
+        var result1= req.body.result1;
+        var result2= req.body.result2;
+
+        var matches = [{
+            team1: team1,
+            team2: team2,
+            result1: result1,
+            result2: result2}
+        ]
+
+        //find the document by ID
+        mongoose.model('Event').findById(req.id, function (err, event) {
+            //update it
+            event.matches.push({
+                team1: team1,
+                team2: team2,
+                result1: result1,
+                result2: result2
+            });
+            event.save(function (err) {
+                if (err)  {
+                    console.error('error:' + err)
+                } else {
+                    //Event has been created
+                    console.log('the sub-doc was removed');
+                    res.format({
+                        //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
+
+                        //JSON response will show the newly created event
+                        json: function(){
+                            res.json(event);
+                        }
+                    });
+                }
+            });
+
+        })
+    })
+
+    //PUT to update a event by ID
+    .put(function(req, res) {
+        console.log("put matches backend called");
+
+        var team1 = req.body.team1;
+        var team2 = req.body.team2;
+        var result1= req.body.result1;
+        var result2= req.body.result2;
+
+        var matches = [{
+            team1: team1,
+            team2: team2,
+            result1: result1,
+            result2: result2}
+        ]
+
+        //find the document by ID
+        mongoose.model('Event').findById(req.body.eventId, function (err, event) {
+            //update it
+            event.update({
+                matches : matches
+            }, function (err, eventID) {
+                if (err) {
+                    res.send("There was a problem updating the information to the database: " + err);
+                }
+                else {
+                    //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+                    res.format({
+                        html: function(){
+                            res.redirect("/events/" + event._id);
+                        },
+                        //JSON responds showing the updated values
+                        json: function(){
+                            res.json(event);
+                        }
+                    });
+                }
+            })
+        });
     });
 
 router.route('/:id')

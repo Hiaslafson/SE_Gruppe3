@@ -32,8 +32,6 @@ myApp.config(['$routeProvider', '$locationProvider',
 
 }]);
 
-
-
 // ----------------------------
 // SERVICE
 // ----------------------------
@@ -60,7 +58,6 @@ myApp.factory('myApp_Service', ['$rootScope',
     return(this); // !! important
 }]);
 
-
 // ----------------------------
 // CONTROLLER
 // ----------------------------
@@ -74,7 +71,6 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
     });
 
     // go to the
-
     $scope.createEventPage = function () {
         //window.location = '/createEvent.html';
         $location.path('createEvent');
@@ -113,23 +109,13 @@ myApp.controller('controller_createEvent', ['$scope', '$http', '$location',
         $http.post('/events', jsonTest).then(function (response) {
             console.log("Save new event: 2");
             console.log('RegSuc: ' + response.data);
-            //   if (response.data.success) {
-            //window.location = '/index.html';
                 $location.path('allEvents');
-            // } else {
-            //     $scope.error = 'Fehler: ' + response.data.error;
-            //}
-        });
-
-
+         });
     }
-
-
 }]);
 
 myApp.controller('controller_editEvent', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location',
     function($scope, $http, myApp_Service, $routeParams, $location) {
-
 
         // saves the id of the selected event into $scope.param
         $scope.param = $routeParams.param;
@@ -150,30 +136,20 @@ myApp.controller('controller_editEvent', ['$scope', '$http', 'myApp_Service', '$
             $scope.detailed_eventDate = $scope.detailed_event_object.eventDate;
             $scope.detailed_info = $scope.detailed_event_object.info;
 
-
         });
 
         $scope.saveEditEvent = function () {
 
             console.log("Save edit new event: 1");
-            var jsonTest = JSON.stringify({ name: $scope.detailed_name, type: $scope.detailed_type, eventDate: $scope.detailed_eventDate, info: $scope.detailed_info});
+            var jsonTest = JSON.stringify({ name: $scope.detailed_name, type: $scope.detailed_type, eventDate: $scope.detailed_eventDate, info: $scope.detailed_info });
             console.log(jsonTest);
 
             $http.put('/events/' + $scope.param, jsonTest).then(function (response) {
                 console.log("Save new event: 2");
                 console.log('RegSuc: ' + response.data);
-                //   if (response.data.success) {
-                //window.location = '/index.html';
-                $location.path('allEvents');
-                // } else {
-                //     $scope.error = 'Fehler: ' + response.data.error;
-                //}
+                $location.path('showDetails');
             });
-
-
         }
-
-
 }]);
 
 
@@ -189,9 +165,7 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
     $scope.detailed_info = "";
     $scope.detailed_matches ="";
 
-
-
-        // get the JSON of one single event
+    // get the JSON of one single event
     $http.get('/events/'+ $scope.param).then(function(response){
         console.log('get event: ' + $scope.param);
         $scope.detailed_event_object = response.data;
@@ -202,54 +176,42 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
         $scope.detailed_info = $scope.detailed_event_object.info;
 
         $scope.detailed_matches = $scope.detailed_event_object.matches;
-
-
-
     });
 
     $scope.delete_selected_match = function(response) {
         console.log('delete match: ' + response);
-        $http.delete('/events/' + response + '/matches/').then(function(response){
+        console.log('from event: ' + $scope.param);
+        var jsonTest = JSON.stringify({ eventId: $scope.param});
+        console.log('delete json: ' + jsonTest);
+
+        $http.post('/events/' + response + '/deleteMatches', jsonTest).then(function(response){
 
                 console.log('success');
-                $location.path('allEvents');
+                window.location.reload();
             } ,
             function (response) {
                 // this function handles error
-                console.log('error');
+                console.log('delete match error:' + response.data);
             });
-
-
     };
 
-
-        $scope.save_selected_match = function (response) {
-
-            console.log("Save match ");
-            var jsonTest = JSON.stringify({ team1: $scope.match.team1, team2: $scope.match.team2, result1: $scope.match.result1, result2: $scope.match.result2});
-            console.log(jsonTest);
-
-            $http.put('/events/' + response + '/matches/', jsonTest).then(function (response) {
-                console.log("Save new Match");
-                console.log('RegSuc: ' + response.data);
-                //   if (response.data.success) {
-                //window.location = '/index.html';
-                $location.path('showDetails');
-                // } else {
-                //     $scope.error = 'Fehler: ' + response.data.error;
-                //}
-            });
+    $scope.save_selected_match = function (id, team1, team2, result1, result2) {
 
 
-        };
+       var jsonTest = JSON.stringify({ team1: team1, team2: team2, result1: result1, result2: result2, eventId: $scope.param});
+        console.log(jsonTest);
 
-       $scope.addMatch = function () {
+        $http.put('/events/' + id + '/matches/', jsonTest).then(function (response) {
+            console.log("Save new Match");
+            console.log('RegSuc: ' + response.data);
+            window.location.reload();
+        });
+    };
 
-           console.log('add Match: ' + $scope.param);
-           $location.path('addMatch/' + $scope.param);
-
-
-        };
+   $scope.addMatch = function () {
+       console.log('add Match: ' + $scope.param);
+       $location.path('addMatch/' + $scope.param);
+    };
 
     $scope.delete_selected_event = function() {
 
@@ -261,7 +223,7 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
         } ,
         function (response) {
         // this function handles error
-            console.log('error');
+            console.error('error delete match:' + response);
         });
     };
 
@@ -294,17 +256,9 @@ myApp.controller('controller_addMatch', ['$scope', '$http', 'myApp_Service', '$r
             $http.post('/events/' + $scope.param + '/matches', jsonTest).then(function (response) {
                 console.log("Save new event: 2");
                 console.log('RegSuc: ' + response.data);
-                //   if (response.data.success) {
-                //window.location = '/index.html';
-                $location.path('allEvents');
-                // } else {
-                //     $scope.error = 'Fehler: ' + response.data.error;
-                //}
+                $location.path('showDetails/' + $scope.param);
+
             });
-
-
         };
-
-
     }]);
 
