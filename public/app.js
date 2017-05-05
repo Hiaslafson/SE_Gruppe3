@@ -22,6 +22,10 @@ myApp.config(['$routeProvider', '$locationProvider',
             templateUrl: 'pages/editEvent.html',
             controller: 'controller_editEvent'
         })
+        .when('/addMatch/:param', {
+            templateUrl: 'pages/addMatch.html',
+            controller: 'controller_addMatch'
+        })
         .otherwise({
             redirectTo: '/allEvents'
         });
@@ -216,7 +220,7 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
             });
 
 
-    }
+    };
 
 
         $scope.save_selected_match = function (response) {
@@ -237,7 +241,15 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
             });
 
 
-        }
+        };
+
+       $scope.addMatch = function () {
+
+           console.log('add Match: ' + $scope.param);
+           $location.path('addMatch/' + $scope.param);
+
+
+        };
 
     $scope.delete_selected_event = function() {
 
@@ -260,4 +272,39 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
     };
 
 }]);
+
+myApp.controller('controller_addMatch', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location',
+    function($scope, $http, myApp_Service, $routeParams, $location) {
+
+        // saves the id of the selected event into $scope.param
+        $scope.param = $routeParams.param;
+
+        $scope.team1 = "";
+        $scope.team2 = "";
+        $scope.result1 = "";
+        $scope.result2 = "";
+        $scope.error="";
+
+        $scope.saveMatch = function () {
+
+            console.log("Save new event: 1");
+            var jsonTest = JSON.stringify({ team1: $scope.match.team1, team2: $scope.match.team2, result1: $scope.match.result1, result2: $scope.match.result2});
+            console.log(jsonTest);
+
+            $http.post('/events/' + $scope.param + '/matches', jsonTest).then(function (response) {
+                console.log("Save new event: 2");
+                console.log('RegSuc: ' + response.data);
+                //   if (response.data.success) {
+                //window.location = '/index.html';
+                $location.path('allEvents');
+                // } else {
+                //     $scope.error = 'Fehler: ' + response.data.error;
+                //}
+            });
+
+
+        };
+
+
+    }]);
 

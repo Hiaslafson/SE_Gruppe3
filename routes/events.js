@@ -217,6 +217,11 @@ router.route('/:id/matches')
     .delete(function (req, res){
         //find by id event --> find by id match --> delete
         console.log("Hallo ich werde aufgerufen");
+    })
+
+    .post(function (req, res){
+        //find by id event --> find by id match --> delete
+        console.log("Hallo ich werde gepostet");
     });
 
 router.route('/:id')

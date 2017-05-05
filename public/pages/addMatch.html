@@ -1,0 +1,24 @@
+<div>
+
+    <h1>MTD - Add Match</h1>
+    <form>
+
+        <label>Team1:</label>
+        <input type="text" id="inputTeam1" name ="name"size="40" maxlength="250" class="form-control" placeholder="Event Name"
+               ng-model="match.team1" required>
+        <label>Team2:</label>
+        <input type="text" id="inputTeam2" name="type" size="40" maxlength="250" class="form-control" placeholder="Sportart"
+               ng-model="match.team2" required>
+        <label>Result1:</label>
+        <input type="text" id="inputResult1" name="type" size="40" maxlength="250" class="form-control" placeholder="Sportart"
+               ng-model="match.result1" required>
+        <label>Result2:</label>
+        <input type="text" id="inputResult2" name="info" size="40" maxlength="250" class="form-control" placeholder="Event Info"
+               ng-model="match.result2" required>
+
+        <br />
+        <button class="btn btn-default" type="submit" ng-click="saveMatch()">Event erzeugen</button>
+
+    </form>
+
+</div>
