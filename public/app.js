@@ -134,16 +134,18 @@ myApp.controller('controller_editEvent', ['$scope', '$http', 'myApp_Service', '$
         $scope.detailed_type = "";
         $scope.detailed_eventDate = "";
         $scope.detailed_info = "";
+        $scope.detailed_matches ="";
 
         // get the JSON of one sin'$location'gle event
         $http.get('/events/'+ $scope.param).then(function(response){
             console.log('get PARAM: ' + $scope.param);
             $scope.detailed_event_object = response.data;
-            console.log($scope.detailed_event_object);
+          //  console.log($scope.detailed_event_object);
             $scope.detailed_name = $scope.detailed_event_object.name;
             $scope.detailed_type = $scope.detailed_event_object.type;
             $scope.detailed_eventDate = $scope.detailed_event_object.eventDate;
             $scope.detailed_info = $scope.detailed_event_object.info;
+
 
         });
 
@@ -181,21 +183,44 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
     $scope.detailed_type = "";
     $scope.detailed_eventDate = "";
     $scope.detailed_info = "";
+    $scope.detailed_matches ="";
 
-    // get the JSON of one single event
+
+
+        // get the JSON of one single event
     $http.get('/events/'+ $scope.param).then(function(response){
-        console.log('get PARAM: ' + $scope.param);
+        console.log('get event: ' + $scope.param);
         $scope.detailed_event_object = response.data;
         console.log($scope.detailed_event_object);
         $scope.detailed_name = $scope.detailed_event_object.name;
         $scope.detailed_type = $scope.detailed_event_object.type;
         $scope.detailed_eventDate = $scope.detailed_event_object.eventDate;
         $scope.detailed_info = $scope.detailed_event_object.info;
+
+        $scope.detailed_matches = $scope.detailed_event_object.matches;
+
+
+
     });
+
+    $scope.delete_selected_match = function(response) {
+        console.log('delete match: ' + response);
+        $http.delete('/events/' + response + '/matches/').then(function(response){
+
+                console.log('success');
+                $location.path('allEvents');
+            } ,
+            function (response) {
+                // this function handles error
+                console.log('error');
+            });
+
+
+    }
 
     $scope.delete_selected_event = function() {
 
-        console.log('delete PARAM: ' + $scope.param);
+        console.log('delete event: ' + $scope.param);
         $http.delete('/events/' + $scope.param).then(function(response){
 
             console.log('success');

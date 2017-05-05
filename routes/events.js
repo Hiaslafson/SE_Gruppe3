@@ -55,10 +55,10 @@ router.route('/')
 
         //TODO gleich als liste übergeben
         //var matches= req.body.matches;
-        var team1 = req.body.team1;
-        var team2 = req.body.team2;
-        var result1= req.body.result1;
-        var result2= req.body.result2;
+        var team1 = "Test1 Manschaft";//req.body.team1;
+        var team2 = "Test 2 Manschaft";req.body.team2;
+        var result1= "2"; req.body.result1;
+        var result2= "0";req.body.result2;
 
         //TODO derzeit nur 1 match möglich
         var matches = [{
@@ -149,6 +149,7 @@ router.route('/:id')
               });
           },
           json: function(){
+              console.log(event.matches);
               res.json(event);
           }
         });
@@ -207,9 +208,16 @@ router.route('/:id')
                     }
                 });
             }
-        })
+        }
     });
 });
+
+//TODO THOMAS: del, put, post
+router.route('/:id/matches')
+    .delete(function (req, res){
+        //find by id event --> find by id match --> delete
+        console.log("Hallo ich werde aufgerufen");
+    });
 
 router.route('/:id')
 //DELETE a Event by ID
