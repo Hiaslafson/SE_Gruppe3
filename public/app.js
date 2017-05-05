@@ -218,6 +218,27 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
 
     }
 
+
+        $scope.save_selected_match = function (response) {
+
+            console.log("Save match ");
+            var jsonTest = JSON.stringify({ team1: $scope.match.team1, team2: $scope.match.team2, result1: $scope.match.result1, result2: $scope.match.result2});
+            console.log(jsonTest);
+
+            $http.put('/events/' + response + '/matches/', jsonTest).then(function (response) {
+                console.log("Save new Match");
+                console.log('RegSuc: ' + response.data);
+                //   if (response.data.success) {
+                //window.location = '/index.html';
+                $location.path('showDetails');
+                // } else {
+                //     $scope.error = 'Fehler: ' + response.data.error;
+                //}
+            });
+
+
+        }
+
     $scope.delete_selected_event = function() {
 
         console.log('delete event: ' + $scope.param);
