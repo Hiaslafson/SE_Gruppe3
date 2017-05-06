@@ -6,15 +6,15 @@ var express = require('express'),
 
 //Any requests to this controller must pass through this 'use' function
 //Copy and pasted from method-override
-router.use(bodyParser.urlencoded({ extended: true }))
+router.use(bodyParser.urlencoded({ extended: true }));
 router.use(methodOverride(function(req, res){
       if (req.body && typeof req.body === 'object' && '_method' in req.body) {
         // look in urlencoded POST bodies and delete it
-        var method = req.body._method
-        delete req.body._method
+        var method = req.body._method;
+        delete req.body._method;
         return method
       }
-}))
+}));
 
 //build the REST operations at the base for events
 //this will be accessible from http://127.0.0.1:3000/events if the default route for / is left unchanged
@@ -54,7 +54,7 @@ router.route('/')
             name : name,
             eventDate : eventDate,
             type : type,
-            info : info,
+            info : info
         }, function (err, event) {
               if (err) {
                   res.send("There was a problem adding the information to the database.");
@@ -86,8 +86,8 @@ router.param('id', function(req, res, next, id) {
         //if it isn't found, we are going to repond with 404
         if (err) {
             console.log(id + ' was not found');
-            res.status(404)
-            var err = new Error('Not Found');
+            res.status(404);
+            err = new Error('Not Found');
             err.status = 404;
             res.format({
                 html: function(){
@@ -120,7 +120,7 @@ router.route('/:id')
         try {
             var eventeventDate = event.eventDate.toString();
         } catch (err) {
-            var eventeventDate = '';
+            eventeventDate = '';
         }
 
         eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'))
@@ -164,7 +164,7 @@ router.route('/:id')
         result2: result2,
         points1: points1,
         points2: points2}
-    ]
+    ];
 
     //find the document by ID
     mongoose.model('Event').findById(req.id, function (err, event) {
@@ -247,7 +247,7 @@ router.route('/:id/matches')
             team2: team2,
             result1: result1,
             result2: result2}
-        ]
+        ];
 
         //find the document by ID
         mongoose.model('Event').findById(req.id, function (err, event) {
@@ -292,7 +292,7 @@ router.route('/:id/matches')
             team2: team2,
             result1: result1,
             result2: result2}
-        ]
+        ];
 
         //find the document by ID
         mongoose.model('Event').findById(req.body.eventId, function (err, event) {
@@ -380,8 +380,7 @@ router.route('/:id/edit')
 	            });
 	        }
 	    });
-	})
-
+	});
 
 
 module.exports = router;
