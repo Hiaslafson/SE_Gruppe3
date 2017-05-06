@@ -88,7 +88,7 @@
                 </thead>
 
                 <tbody>
-                <tr ng-repeat="match in detailed_matches">
+                <tr ng-repeat="match in detailed_matches | orderBy:'+startNummer'">
                     <td><input type="text" id="skiFahrer" name="type" size="40" maxlength="250" class="form-control" placeholder=""
                                ng-model="match.team1" required></td>
                     <td><input type="text" id="startNummer" name="type" size="10" maxlength="250" class="form-control" placeholder=""
@@ -123,10 +123,7 @@
                     <thead><th>Überblick Mannschaften</th></thead>
                     <tr><td>&nbsp</td></tr>
                     <tr ng-repeat="match in detailed_matches" >
-
                         <td>{{match.team1}}</td>
-                    </tr>
-                    <tr>
                         <td>{{match.team2}}</td>
                     </tr>
                 </table>
@@ -142,12 +139,31 @@
                 </table>
             </div>
                 <br>
-                <div class="well">
 
-                <p>STATISTIK</p>
-                <p>Tabelle</p>
-                <p>.......</p>
-                <p>.......</p>
+            <div class="well">
+
+                <table ng-if="detailed_type == 'Fußball'">
+                    <thead><th>Tabelle</th></thead>
+                    <tr><td>&nbsp</td></tr>
+                    <tr ng-repeat="point in detailed_points | orderBy:'-points'" >
+                        <td>{{point.team}}</td>
+                        <td>{{point.points}}</td>
+                    </tr>
+                </table>
+
+                <table  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
+                    <tr>
+                        <th>StartPos.   </th>
+                        <th>Fahrer  </th>
+                        <th>Zeit</th>
+                    </tr>
+                    <tr ng-repeat="match in detailed_matches | orderBy:'+team2'">
+                        <td>{{match.result1}}</td>
+                        <td>{{match.team1}}</td>
+                        <td>{{match.team2}}</td>
+
+                    </tr>
+                </table>
             </div>
 
         </div>

@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');  
 var eventSchema = new mongoose.Schema({
-  name: String,
-  eventDate: { type: Date, default: Date.now },
-  type: String,
-  info: String,
+    name: String,
+    eventDate: { type: Date, default: Date.now },
+    type: String,
+    info: String,
 
- matches:
+    matches:
         [
             {
                 team1: String,
@@ -13,7 +13,17 @@ var eventSchema = new mongoose.Schema({
                 result1: Number,
                 result2: Number,
             }
+        ],
+
+    points:
+        [
+            {
+                team: String,
+                points: Number
+            }
         ]
+
+
 
 });
 mongoose.model('Event', eventSchema);

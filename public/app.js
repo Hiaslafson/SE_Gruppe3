@@ -81,6 +81,7 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
         $scope.single_event = response;
         $scope.abc = 'df';
 
+        //TODO was is des??
         (function () {
             myApp_Service.setTest('1234');
         })();
@@ -176,6 +177,7 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
         $scope.detailed_info = $scope.detailed_event_object.info;
 
         $scope.detailed_matches = $scope.detailed_event_object.matches;
+        $scope.detailed_points = $scope.detailed_event_object.points;
     });
 
     $scope.delete_selected_match = function(response) {

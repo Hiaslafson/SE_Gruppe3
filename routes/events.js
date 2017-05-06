@@ -133,7 +133,8 @@ router.route('/:id')
               });
           },
           json: function(){
-              console.log(event.matches);
+              console.log('EVENT MATCHES: ' + event.matches);
+              console.log('EVENT POINTS: ' + event.points);
               res.json(event);
           }
         });
@@ -149,23 +150,6 @@ router.route('/:id')
     var eventDate = req.body.eventDate;
     var info = req.body.info;
     var type = req.body.type;
-    //TODO gleich als liste übergeben
-    var team1 = req.body.team1;
-    var team2 = req.body.team2;
-    var result1= req.body.result1;
-    var result2= req.body.result2;
-    var points1= req.body.points1;
-    var points2= req.body.points2;
-
-    //TODO derzeit nur 1 match
-    var matches = [{
-        team1: team1,
-        team2: team2,
-        result1: result1,
-        result2: result2,
-        points1: points1,
-        points2: points2}
-    ];
 
     //find the document by ID
     mongoose.model('Event').findById(req.id, function (err, event) {
@@ -175,7 +159,6 @@ router.route('/:id')
             eventDate : eventDate,
             type : type,
             info : info,
-            matches : matches
         }, function (err, eventID) {
             if (err) {
                 res.send("There was a problem updating the information to the database: " + err);
@@ -196,7 +179,6 @@ router.route('/:id')
     });
 });
 
-//TODO delete by id vom match is ned gaunga
 router.route('/:id/deleteMatches')
     .post(function (req, res){
         //find by id event --> find by id match --> delete
@@ -232,6 +214,8 @@ router.route('/:id/deleteMatches')
 
 });
 
+
+// POST NEW MATCH
 router.route('/:id/matches')
     //add match
     .post(function (req, res){
@@ -250,9 +234,149 @@ router.route('/:id/matches')
             result2: result2}
         ];
 
+        var ptTeam;
+
+        //TODO this is for football
+        if (result2 != null) {
+
+            if (result1 > result2) {
+                ptTeam = team1;
+            } else if (result1 < result2) {
+                ptTeam = team2;
+            }
+        }
+
+        var pushTeam1FirstTime = false;
+        var pushTeam2TeamFirstTime = false;
+
+        mongoose.model('Event').findOne(
+            {
+                'points.team': team1
+            },
+            function (err, team) {
+                if (team == null) {
+                    pushTeam1FirstTime = true;
+                }
+            }
+        );
+
+        mongoose.model('Event').findOne(
+            {
+                'points.team': team2
+            },
+            function (err, team) {
+                if (team == null) {
+                    pushTeam2TeamFirstTime = true;
+                }
+            }
+        );
+
+
+
         //find the document by ID
         mongoose.model('Event').findById(req.id, function (err, event) {
+
+            if (pushTeam1FirstTime) {
+                event.points.push({
+                    team: team1,
+                    points: 0
+                });
+            }
+
+            if (pushTeam2TeamFirstTime) {
+                event.points.push({
+                    team: team2,
+                    points: 0
+                });
+            }
+
             //update it
+            event.matches.push({
+                team1: team1,
+                team2: team2,
+                result1: result1,
+                result2: result2
+            });
+            event.save(function (err) {
+
+                if (result1 == result2) {
+                    mongoose.model('Event').findOneAndUpdate(
+                        {
+                            'points.team': team1,
+                            'points.team': team2,
+                        },
+                        {$inc:
+                            {
+                                'points.$.points': 1
+                            }
+                        },
+                        function (err, team) {
+                            if (team != null) {
+                                console.log('TEAM PT: ' + team.points[0].points);
+                                var pt = team.points[0].points + 3; // inc 3 points for winner
+                            }
+                        }
+                    );
+                } else {
+                    mongoose.model('Event').findOneAndUpdate(
+                        {
+                            'points.team': ptTeam
+                        },
+                        {
+                            $inc: {
+                                'points.$.points': 3
+                            }
+                        },
+                        function (err, team) {
+                            if (team != null) {
+                                console.log('TEAM PT: ' + team.points[0].points);
+                                var pt = team.points[0].points + 3; // inc 3 points for winner
+                            }
+                        }
+                    );
+                }
+
+                if (err)  {
+                    console.error('error:' + err)
+                } else {
+                    //Event has been created
+                    console.log('the sub-doc was removed');
+                    res.format({
+                        //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
+
+                        //JSON response will show the newly created event
+                        json: function(){
+                            res.json(event);
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+    })
+
+    //PUT to update an MATCH by ID
+    .put(function(req, res) {
+        console.log("put matches backend called");
+
+        var team1 = req.body.team1;
+        var team2 = req.body.team2;
+        var result1= req.body.result1;
+        var result2= req.body.result2;
+
+        var matches = [{
+            team1: team1,
+            team2: team2,
+            result1: result1,
+            result2: result2}
+        ];
+
+        //find the document by ID
+        mongoose.model('Event').findById(req.body.eventId, function (err, event) {
+    //Todo
+            event.matches.id(req.id).remove();
             event.matches.push({
                 team1: team1,
                 team2: team2,
@@ -276,47 +400,27 @@ router.route('/:id/matches')
                 }
             });
 
-        })
-    })
-
-    //PUT to update a event by ID
-    .put(function(req, res) {
-        console.log("put matches backend called");
-
-        var team1 = req.body.team1;
-        var team2 = req.body.team2;
-        var result1= req.body.result1;
-        var result2= req.body.result2;
-
-        var matches = [{
-            team1: team1,
-            team2: team2,
-            result1: result1,
-            result2: result2}
-        ];
-
-        //find the document by ID
-        mongoose.model('Event').findById(req.body.eventId, function (err, event) {
+            //TODO geht ned, da es alle matches updated, ned nur eins
             //update it
-            event.update({
-                matches : matches
-            }, function (err, eventID) {
-                if (err) {
-                    res.send("There was a problem updating the information to the database: " + err);
-                }
-                else {
-                    //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
-                    res.format({
-                        html: function(){
-                            res.redirect("/events/" + event._id);
-                        },
-                        //JSON responds showing the updated values
-                        json: function(){
-                            res.json(event);
-                        }
-                    });
-                }
-            })
+            // event.update({
+            //     matches : matches
+            // }, function (err, eventID) {
+            //     if (err) {
+            //         res.send("There was a problem updating the information to the database: " + err);
+            //     }
+            //     else {
+            //         //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
+            //         res.format({
+            //             html: function(){
+            //                 res.redirect("/events/" + event._id);
+            //             },
+            //             //JSON responds showing the updated values
+            //             json: function(){
+            //                 res.json(event);
+            //             }
+            //         });
+            //     }
+            // })
         });
     });
 

@@ -8,18 +8,22 @@
                ng-model="detailed_name" required>
 
         <label>Sportart:</label>
-        <input type="text" id="inputSportType" name="type" size="40" maxlength="250" class="form-control" placeholder="Sportart"
-               ng-model="detailed_type" required>
-        <label>Datum:</label>
-        <!-- TODO: <input type="text" id="eventDate" name="type" size="40" maxlength="250" class="form-control" placeholder="Datum"-->
-               <!--ng-model="eventDate" required>-->
-                <!-- TODO: zeigt immt der das richtige datum?-->
-                <input type="text" id="eventDate" class="form-control" placeholder="Datum"
-                       ng-model="detailed_eventDate" required>
 
-                <label>Info:</label>
-                <input type="text" id="inputEventInfo" name="info" size="40" maxlength="250" class="form-control" placeholder="Event Info"
-                       ng-model="detailed_info" required>
+        <!--TODO in die nächste zeile -->
+        <select ng-model="type">
+                <option value="Fußball">Fußball</option>
+                <option value="Skifahren">Skifahren</option>
+                <option value="Formel1">Formel1</option>
+        </select>
+
+        <label>Datum:</label>
+        <!-- TODO: zeigt immt der das richtige datum?-->
+        <input type="text" id="eventDate" class="form-control" placeholder="Datum"
+               ng-model="detailed_eventDate" required>
+
+        <label>Info:</label>
+        <input type="text" id="inputEventInfo" name="info" size="40" maxlength="250" class="form-control" placeholder="Event Info"
+               ng-model="detailed_info" required>
 
         <br />
                 <button class="btn btn-default" type="submit" ng-click="saveEditEvent()">Event ändern</button>
