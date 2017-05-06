@@ -227,16 +227,9 @@ router.route('/:id/matches')
         var result1= req.body.result1;
         var result2= req.body.result2;
 
-        var matches = [{
-            team1: team1,
-            team2: team2,
-            result1: result1,
-            result2: result2}
-        ];
-
         var ptTeam;
 
-        //TODO this is for football
+        //TODO this is only for football
         if (result2 != null) {
 
             if (result1 > result2) {
@@ -270,8 +263,6 @@ router.route('/:id/matches')
                 }
             }
         );
-
-
 
         //find the document by ID
         mongoose.model('Event').findById(req.id, function (err, event) {
@@ -313,7 +304,6 @@ router.route('/:id/matches')
                         function (err, team) {
                             if (team != null) {
                                 console.log('TEAM PT: ' + team.points[0].points);
-                                var pt = team.points[0].points + 3; // inc 3 points for winner
                             }
                         }
                     );
@@ -366,63 +356,39 @@ router.route('/:id/matches')
         var result1= req.body.result1;
         var result2= req.body.result2;
 
-        var matches = [{
-            team1: team1,
-            team2: team2,
-            result1: result1,
-            result2: result2}
-        ];
+        //TODO de punkte ändern sich nu ned mit waun se da punktestand änderd
 
-        //find the document by ID
-        mongoose.model('Event').findById(req.body.eventId, function (err, event) {
-    //Todo
-            event.matches.id(req.id).remove();
-            event.matches.push({
-                team1: team1,
-                team2: team2,
-                result1: result1,
-                result2: result2
-            });
-            event.save(function (err) {
-                if (err)  {
-                    console.error('error:' + err)
-                } else {
-                    //Event has been created
-                    console.log('the sub-doc was removed');
-                    res.format({
-                        //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
-
-                        //JSON response will show the newly created event
-                        json: function(){
-                            res.json(event);
-                        }
-                    });
+        mongoose.model('Event').findOneAndUpdate(
+            {
+                'matches._id': req.id,
+            },
+            {$set:
+                {
+                    'matches.$.team1': team1,
+                    'matches.$.team2': team2,
+                    'matches.$.result1': result1,
+                    'matches.$.result2': result2
                 }
-            });
+            },
+            function (err, event) {
+                event.save(function (err) {
+                    if (err)  {
+                        console.error('error:' + err)
+                    } else {
+                        //Event has been created
+                        console.log('the sub-doc was removed');
+                        res.format({
+                            //HTML response will set the location and redirect back to the home page. You could also create a 'success' page if that's your thing
 
-            //TODO geht ned, da es alle matches updated, ned nur eins
-            //update it
-            // event.update({
-            //     matches : matches
-            // }, function (err, eventID) {
-            //     if (err) {
-            //         res.send("There was a problem updating the information to the database: " + err);
-            //     }
-            //     else {
-            //         //HTML responds by going back to the page or you can be fancy and create a new view that shows a success page.
-            //         res.format({
-            //             html: function(){
-            //                 res.redirect("/events/" + event._id);
-            //             },
-            //             //JSON responds showing the updated values
-            //             json: function(){
-            //                 res.json(event);
-            //             }
-            //         });
-            //     }
-            // })
+                            //JSON response will show the newly created event
+                            json: function(){
+                                res.json(event);
+                            }
+                        });
+                    }
+                })
+            });
         });
-    });
 
 router.route('/:id')
 //DELETE a Event by ID
