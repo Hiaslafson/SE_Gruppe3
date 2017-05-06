@@ -73,11 +73,12 @@ router.route('/')
         })
     });
 
-/* GET New Event page. */
+/*
+/* GET New Event page.
 router.get('/new', function(req, res) {
     res.render('events/new', { title: 'Add New Event' });
 });
-
+*/
 // route middleware to validate :id
 router.param('id', function(req, res, next, id) {
     //console.log('validating ' + id + ' exists');
@@ -363,7 +364,7 @@ router.route('/:id/edit')
 	            //Return the event
 	            console.log('GET Retrieving ID: ' + event._id);
               var eventeventDate = event.eventDate.toISOString();
-              eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'))
+              eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'));
 	            res.format({
 	                //HTML response will render the 'edit.jade' template
 	                html: function(){
