@@ -30,6 +30,10 @@ myApp.config(['$routeProvider', '$locationProvider',
             templateUrl: 'pages/addDriver.html',
             controller: 'controller_addMatch'
         })
+        .when('/info', {
+            templateUrl: 'pages/info.html',
+            controller: 'controller_index'
+        })
         .otherwise({
             redirectTo: '/allEvents'
         });

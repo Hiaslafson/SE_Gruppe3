@@ -115,55 +115,60 @@
 
         <!-- RIGHT -->
         <div class="col-md-2 sidenav">
-            <div class="well">
+        <div class="well">
 
-                <table ng-if="detailed_type == 'Fußball'">
-                    <thead><th>Überblick Mannschaften</th></thead>
-                    <tr><td>&nbsp</td></tr>
-                    <tr ng-repeat="match in detailed_matches" >
-                    < <td>{{match.team1}}</td>
-                     <!--   <td>{{match.team2}}</td> -->
-                    </tr>
-                </table>
+            <table ng-if="detailed_type == 'Fußball'">
+                <thead><th>Überblick Mannschaften</th></thead>
+                <tr><td>&nbsp</td></tr>
+                <tr ng-repeat="match in detailed_matches" >
+                    <td>{{match.team1}}</td>
+                    <!--   <td>{{match.team2}}</td> -->
+                </tr>
+            </table>
 
 
-                <table  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
-                    <tr><th>Überblick Fahrer</th></tr>
-                    <tr><td>&nbsp</td></tr>
-                    <tr ng-repeat="match in detailed_matches">
+            <table  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
+                <tr><th>Überblick Fahrer</th></tr>
+                <tr><td>&nbsp</td></tr>
+                <tr ng-repeat="match in detailed_matches">
 
-                        <td>{{match.team1}}</td>
-                    </tr>
-                </table>
-            </div>
-                <br>
-
-            <div class="well">
-
-                <table ng-if="detailed_type == 'Fußball'">
-                    <thead><th>Tabelle</th></thead>
-                    <tr><td>&nbsp</td></tr>
-                    <tr ng-repeat="point in detailed_points | orderBy:'-points'" >
-                        <td>{{point.team}}</td>
-                        <td>{{point.points}}</td>
-                    </tr>
-                </table>
-
-                <table  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
-                    <tr>
-                        <th>StartPos.   </th>
-                        <th>Fahrer  </th>
-                        <th>Zeit</th>
-                    </tr>
-                    <tr ng-repeat="match in detailed_matches | orderBy:'+team2'">
-                        <td>{{match.result1}}</td>
-                        <td>{{match.team1}}</td>
-                        <td>{{match.team2}}</td>
-
-                    </tr>
-                </table>
-            </div>
-
+                    <td>{{match.team1}}</td>
+                </tr>
+            </table>
         </div>
+        <br>
+
+        <div class="well">
+
+            <table ng-if="detailed_type == 'Fußball'">
+                <thead><th>Tabelle</th></thead>
+                <tr><td>&nbsp</td></tr>
+                <tr ng-repeat="point in detailed_points | orderBy:'-points'" >
+                    <td>{{point.team}}</td>
+                    <td>{{point.points}}</td>
+                </tr>
+            </table>
+
+            <table  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
+                <tr>
+                    <th>Rang   </th>
+                    <td>&nbsp</td>
+                    <th>Fahrer  </th>
+
+                    <th>Zeit</th>
+                </tr>
+                <tr><td>&nbsp</td></tr>
+                <tr ng-repeat="match in detailed_matches | orderBy:'+team2'">
+                    <td>{{$index +1}}</td>
+                    <td>&nbsp</td>
+                    <td>{{match.team1}}</td>
+                    <td>&nbsp</td>
+                    <td>{{match.team2}}</td>
+
+                </tr>
+            </table>
+        </div>
+
+    </div>
 
     </div>  </div>
