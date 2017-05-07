@@ -1,0 +1,22 @@
+<div class="form-group">
+
+    <h1>MTD - Add Driver</h1>
+    <form>
+
+        <label>Fahrer:</label>
+        <input type="text" id="inputTeam1" name ="name"size="40" maxlength="100" class="form-control" placeholder="Fahrer"
+               ng-model="match.team1" required>
+        <label>Startnummer:</label>
+        <input type="text" id="inputResult1" name="type" size="40" maxlength="100" class="form-control" placeholder="Startnummer"
+               ng-model="match.result1" required>
+        <label>Fahrtzeit (Ergebnis):</label>
+        <input type="text" id="inputTeam2" name="type" size="40" maxlength="100" class="form-control" placeholder="Fahrtzeit"
+               ng-model="match.team2" required>
+
+
+        <br />
+        <button class="btn btn-default" type="submit" ng-click="saveMatch()">Fahrer hinzufügen</button>
+
+    </form>
+
+</div>

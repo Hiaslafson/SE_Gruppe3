@@ -40,6 +40,10 @@
 
         </div>
 
+
+
+
+
         <div class="col-md-8 text-left angular-view-style" align="center">
 
 
@@ -61,11 +65,9 @@
                                ng-model="match.team1" required></td>
                     <td><input type="text" id="team2" name="type" size="30" maxlength="250" class="form-control" placeholder="Sportart"
                                ng-model="match.team2" required></td>
-                    <td><input type="text" id="result1" name="type" size="10" maxlength="250" class="form-control" placeholder="Sportart"
-                               ng-model="match.result1" required> </td>
+                    <td> {{match.result1}}</td>
                     <td align="center"> : </td>
-                    <td><input type="text" id="result2" name="type" size="10" maxlength="250" class="form-control" placeholder="Sportart"
-                               ng-model="match.result2" required></td>
+                    <td>{{match.result2}}</td>
                     <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match speichern</button></td>
                 </tr>
                 <tr>
@@ -115,22 +117,18 @@
         <div class="col-md-2 sidenav">
             <div class="well">
 
-
-
-
-
                 <table ng-if="detailed_type == 'Fußball'">
                     <thead><th>Überblick Mannschaften</th></thead>
                     <tr><td>&nbsp</td></tr>
                     <tr ng-repeat="match in detailed_matches" >
-                        <td>{{match.team1}}</td>
-                        <td>{{match.team2}}</td>
+                    < <td>{{match.team1}}</td>
+                     <!--   <td>{{match.team2}}</td> -->
                     </tr>
                 </table>
 
 
                 <table  ng-if="detailed_type == 'Skifahren' || detailed_type == 'Formel1'">
-                    <thead><th>Überblick Fahrer</th></thead>
+                    <tr><th>Überblick Fahrer</th></tr>
                     <tr><td>&nbsp</td></tr>
                     <tr ng-repeat="match in detailed_matches">
 

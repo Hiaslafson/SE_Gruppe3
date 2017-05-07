@@ -26,6 +26,10 @@ myApp.config(['$routeProvider', '$locationProvider',
             templateUrl: 'pages/addMatch.html',
             controller: 'controller_addMatch'
         })
+        .when('/addDriver/:param', {
+            templateUrl: 'pages/addDriver.html',
+            controller: 'controller_addMatch'
+        })
         .otherwise({
             redirectTo: '/allEvents'
         });
@@ -212,7 +216,12 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
 
    $scope.addMatch = function () {
        console.log('add Match: ' + $scope.param);
-       $location.path('addMatch/' + $scope.param);
+       if($scope.detailed_type == "Skifahren" || $scope.detailed_type=="Formel1"){
+           $location.path('addDriver/' + $scope.param);
+       }else{
+           $location.path('addMatch/' + $scope.param);
+       }
+
     };
 
     $scope.delete_selected_event = function() {
@@ -230,6 +239,7 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
     };
 
     $scope.edit_selected_event = function() {
+
         console.log('edit PARAM: ' + $scope.param);
         $location.path('editEvent/' + $scope.param);
 
