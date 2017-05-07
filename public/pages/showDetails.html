@@ -68,7 +68,7 @@
                     <td> {{match.result1}}</td>
                     <td align="center"> : </td>
                     <td>{{match.result2}}</td>
-                    <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match speichern</button></td>
+                    <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match speichern</button></td>
                 </tr>
                 <tr>
                     <td><button id="addMatch" class="btn btn-default" ng-click="addMatch()">Match hinzufügen</button>
@@ -118,11 +118,16 @@
         <div class="well">
 
             <table ng-if="detailed_type == 'Fußball'">
-                <thead><th>Überblick Mannschaften</th></thead>
+                <thead><th>Überblick Matches</th></thead>
+                <tr><td>&nbsp</td></tr>
+                <tr>
+                    <th>Team1   </th>
+                    <th>Team2  </th>
+                </tr>
                 <tr><td>&nbsp</td></tr>
                 <tr ng-repeat="match in detailed_matches" >
                     <td>{{match.team1}}</td>
-                    <!--   <td>{{match.team2}}</td> -->
+                    <td>{{match.team2}}</td>
                 </tr>
             </table>
 
@@ -141,9 +146,14 @@
         <div class="well">
 
             <table ng-if="detailed_type == 'Fußball'">
-                <thead><th>Tabelle</th></thead>
+                <tr>
+                    <th>Rang   </th>
+                    <th>Team  </th>
+                    <th>Punkte</th>
+                </tr>
                 <tr><td>&nbsp</td></tr>
                 <tr ng-repeat="point in detailed_points | orderBy:'-points'" >
+                    <td>{{$index +1}}</td>
                     <td>{{point.team}}</td>
                     <td>{{point.points}}</td>
                 </tr>

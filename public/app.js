@@ -89,13 +89,7 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
         $scope.single_event = response;
         $scope.abc = 'df';
 
-        //TODO was is des??
-        (function () {
-            myApp_Service.setTest('1234');
-        })();
-
         $location.path('showDetails/' + response);
-
     }
 
 }]);
@@ -188,10 +182,11 @@ myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', 
         $scope.detailed_points = $scope.detailed_event_object.points;
     });
 
-    $scope.delete_selected_match = function(response) {
+    $scope.delete_selected_match = function(response,team1, team2, result1, result2) {
         console.log('delete match: ' + response);
+        console.log('DELETE: match team1: ' + response.team1);
         console.log('from event: ' + $scope.param);
-        var jsonTest = JSON.stringify({ eventId: $scope.param});
+        var jsonTest = JSON.stringify({ eventId: $scope.param, team1: team1, team2: team2, result1: result1, result2: result2});
         console.log('delete json: ' + jsonTest);
 
         $http.post('/events/' + response + '/deleteMatches', jsonTest).then(function(response){

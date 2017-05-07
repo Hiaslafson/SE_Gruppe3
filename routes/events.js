@@ -16,13 +16,15 @@ router.use(methodOverride(function(req, res){
       }
 }));
 
+//########################################################################################################################
+//      GET EVENT
+//########################################################################################################################
 //build the REST operations at the base for events
 //this will be accessible from http://127.0.0.1:3000/events if the default route for / is left unchanged
 router.route('/')
     //GET all events
     .get(function(req, res, next) {
         //retrieve all events from Monogo
-        console.log("I recived a get request");
         mongoose.model('Event').find({}, function (err, events) {
 
               if (err) {
@@ -40,6 +42,10 @@ router.route('/')
               }
         });
     })
+
+//########################################################################################################################
+//      POST EVENT --> NEW EVENT
+//########################################################################################################################
 
     //POST a new event
     .post(function(req, res) {
@@ -73,12 +79,6 @@ router.route('/')
         })
     });
 
-/*
-/* GET New Event page.
-router.get('/new', function(req, res) {
-    res.render('events/new', { title: 'Add New Event' });
-});
-*/
 // route middleware to validate :id
 router.param('id', function(req, res, next, id) {
     //console.log('validating ' + id + ' exists');
@@ -112,7 +112,6 @@ router.param('id', function(req, res, next, id) {
 
 router.route('/:id')
   .get(function(req, res) {
-      console.log('TEST1234');
     mongoose.model('Event').findById(req.id, function (err, event) {
       if (err) {
         console.log('GET Error: There was a problem retrieving: ' + err);
@@ -141,6 +140,10 @@ router.route('/:id')
       }
     });
   });
+
+//########################################################################################################################
+//      PUT EVENT --> UPDATE
+//########################################################################################################################
 
 router.route('/:id')
 //PUT to update a event by ID
@@ -179,11 +182,141 @@ router.route('/:id')
     });
 });
 
+router.route('/:id/edit')
+	//GET the individual event by Mongo ID
+	.get(function(req, res) {
+	    //search for the event within Mongo
+	    mongoose.model('Event').findById(req.id, function (err, event) {
+	        if (err) {
+	            console.log('GET Error: There was a problem retrieving: ' + err);
+	        } else {
+	            //Return the event
+	            console.log('GET Retrieving ID: ' + event._id);
+              var eventeventDate = event.eventDate.toISOString();
+              eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'));
+	            res.format({
+	                //HTML response will render the 'edit.jade' template
+	                html: function(){
+	                       res.render('events/edit', {
+	                          title: 'Event' + event._id,
+                            "eventeventDate" : eventeventDate,
+	                          "event" : event
+	                      });
+	                 },
+	                 //JSON response will return the JSON output
+	                json: function(){
+	                       res.json(event);
+	                 }
+	            });
+	        }
+	    });
+	});
+
+//########################################################################################################################
+//      DELETE EVENT
+//########################################################################################################################
+router.route('/:id')
+//DELETE a Event by ID
+    .delete(function (req, res){
+        console.log('find event by ID:' + req.id);
+        mongoose.model('Event').findById(req.id, function (err, event) {
+            if (err) {
+                return console.error(err);
+            } else {
+                //remove it from Mongo
+                event.remove(function (err, event) {
+                    if (err) {
+                        return console.error(err);
+                    } else {
+                        //Returning success messages saying it was deleted
+                        console.log('DELETE removing ID: ' + event._id);
+                        res.format({
+                            //HTML returns us back to the main page, or you can create a success page
+                            html: function(){
+                                res.redirect("/events");
+                            },
+                            //JSON returns the item with the message that is has been deleted
+                            json: function(){
+                                res.json({message : 'deleted',
+                                    item : event
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//      MATCHES
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+//########################################################################################################################
+//      POST MATCH FOR DELETE
+//########################################################################################################################
 router.route('/:id/deleteMatches')
     .post(function (req, res){
         //find by id event --> find by id match --> delete
-        console.log("delete matches backend called, match: " + req.id);
+        console.log("delete matches backend called, match: " + req.id); //= match.id
         console.log('find event by ID:' + req.body.eventId);
+
+        var team1 = req.body.team1;
+        var team2 = req.body.team2;
+        var result1= req.body.result1;
+        var result2= req.body.result2;
+
+        var ptTeam;
+
+        //result is only != if fußball
+        if (result2 != null) {
+
+            if (result1 > result2) {
+                ptTeam = team1;
+            } else if (result1 < result2) {
+                ptTeam = team2;
+            }
+
+            if (result1 == result2) {
+                mongoose.model('Event').findOneAndUpdate(
+                    {
+                        'points.team': team1,
+                        'points.team': team2,
+                    },
+                    {$inc:
+                        {
+                            'points.$.points': -1
+                        }
+                    },
+                    function (err, team) {
+                        if (team != null) {
+                            console.log('TEAM PT: ' + team.points[0].points);
+                        }
+                    }
+                );
+            } else {
+                mongoose.model('Event').findOneAndUpdate(
+                    {
+                        'points.team': ptTeam
+                    },
+                    {
+                        $inc: {
+                            'points.$.points': -3
+                        }
+                    },
+                    function (err, team) {
+                        if (team != null) {
+                            console.log('TEAM PT: ' + team.points[0].points);
+                        }
+                    }
+                );
+            }
+        }
+
 
         mongoose.model('Event').findById(req.body.eventId, function (err, event) {
             if (err) {
@@ -207,17 +340,17 @@ router.route('/:id/deleteMatches')
                             }
                         });
                     }
-
                 });
             }
         });
+    });
 
-});
+//########################################################################################################################
+//      POST NEW MATCH
+//########################################################################################################################
 
-
-// POST NEW MATCH
 router.route('/:id/matches')
-    //add match
+//add match
     .post(function (req, res){
         //find by id event --> find by id match --> delete
         console.log("post matches backend called, matchID:" + req.id);
@@ -228,8 +361,10 @@ router.route('/:id/matches')
         var result2= req.body.result2;
 
         var ptTeam;
+        var pushTeam1FirstTime = false;
+        var pushTeam2TeamFirstTime = false;
 
-        //TODO this is only for football
+        //result is only != if fußball
         if (result2 != null) {
 
             if (result1 > result2) {
@@ -237,32 +372,29 @@ router.route('/:id/matches')
             } else if (result1 < result2) {
                 ptTeam = team2;
             }
+
+            mongoose.model('Event').findOne(
+                {
+                    'points.team': team1
+                },
+                function (err, team) {
+                    if (team == null) {
+                        pushTeam1FirstTime = true;
+                    }
+                }
+            );
+
+            mongoose.model('Event').findOne(
+                {
+                    'points.team': team2
+                },
+                function (err, team) {
+                    if (team == null) {
+                        pushTeam2TeamFirstTime = true;
+                    }
+                }
+            );
         }
-
-        var pushTeam1FirstTime = false;
-        var pushTeam2TeamFirstTime = false;
-
-        mongoose.model('Event').findOne(
-            {
-                'points.team': team1
-            },
-            function (err, team) {
-                if (team == null) {
-                    pushTeam1FirstTime = true;
-                }
-            }
-        );
-
-        mongoose.model('Event').findOne(
-            {
-                'points.team': team2
-            },
-            function (err, team) {
-                if (team == null) {
-                    pushTeam2TeamFirstTime = true;
-                }
-            }
-        );
 
         //find the document by ID
         mongoose.model('Event').findById(req.id, function (err, event) {
@@ -341,13 +473,14 @@ router.route('/:id/matches')
                     });
                 }
             });
-
         });
-
-
     })
 
+//########################################################################################################################
+//      PUT MATCH --> UPDATE
+//########################################################################################################################
     //PUT to update an MATCH by ID
+
     .put(function(req, res) {
         console.log("put matches backend called");
 
@@ -355,8 +488,6 @@ router.route('/:id/matches')
         var team2 = req.body.team2;
         var result1= req.body.result1;
         var result2= req.body.result2;
-
-        //TODO de punkte ändern sich nu ned mit waun se da punktestand änderd
 
         mongoose.model('Event').findOneAndUpdate(
             {
@@ -388,70 +519,8 @@ router.route('/:id/matches')
                     }
                 })
             });
-        });
-
-router.route('/:id')
-//DELETE a Event by ID
-    .delete(function (req, res){
-        console.log('find event by ID:' + req.id);
-        mongoose.model('Event').findById(req.id, function (err, event) {
-            if (err) {
-                return console.error(err);
-            } else {
-                //remove it from Mongo
-                event.remove(function (err, event) {
-                    if (err) {
-                        return console.error(err);
-                    } else {
-                        //Returning success messages saying it was deleted
-                        console.log('DELETE removing ID: ' + event._id);
-                        res.format({
-                            //HTML returns us back to the main page, or you can create a success page
-                            html: function(){
-                                res.redirect("/events");
-                            },
-                            //JSON returns the item with the message that is has been deleted
-                            json: function(){
-                                res.json({message : 'deleted',
-                                    item : event
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
     });
 
-router.route('/:id/edit')
-	//GET the individual event by Mongo ID
-	.get(function(req, res) {
-	    //search for the event within Mongo
-	    mongoose.model('Event').findById(req.id, function (err, event) {
-	        if (err) {
-	            console.log('GET Error: There was a problem retrieving: ' + err);
-	        } else {
-	            //Return the event
-	            console.log('GET Retrieving ID: ' + event._id);
-              var eventeventDate = event.eventDate.toISOString();
-              eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'));
-	            res.format({
-	                //HTML response will render the 'edit.jade' template
-	                html: function(){
-	                       res.render('events/edit', {
-	                          title: 'Event' + event._id,
-                            "eventeventDate" : eventeventDate,
-	                          "event" : event
-	                      });
-	                 },
-	                 //JSON response will return the JSON output
-	                json: function(){
-	                       res.json(event);
-	                 }
-	            });
-	        }
-	    });
-	});
 
 
 module.exports = router;
