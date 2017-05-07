@@ -61,14 +61,16 @@
 
                 <tbody>
                 <tr ng-repeat="match in detailed_matches">
-                    <td><input type="text" id="team1" name="type" size="30" maxlength="250" class="form-control" placeholder="Sportart"
-                               ng-model="match.team1" required></td>
-                    <td><input type="text" id="team2" name="type" size="30" maxlength="250" class="form-control" placeholder="Sportart"
-                               ng-model="match.team2" required></td>
+                    <!--TODO <td><input type="text" id="team1" name="type" size="30" maxlength="250" class="form-control" placeholder="Sportart"-->
+                               <!--ng-model="match.team1" required></td>-->
+                    <!--<td><input type="text" id="team2" name="type" size="30" maxlength="250" class="form-control" placeholder="Sportart"-->
+                               <!--ng-model="match.team2" required></td>-->
+                    <td> {{match.team1}}</td>
+                    <td> {{match.team2}}</td>
                     <td> {{match.result1}}</td>
                     <td align="center"> : </td>
                     <td>{{match.result2}}</td>
-                    <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match speichern</button></td>
+                    <td> <button id="deleteMatch" class="btn btn-default" ng-click="delete_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match löschen</button> <!-- TODO <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Match speichern</button></td>-->
                 </tr>
                 <tr>
                     <td><button id="addMatch" class="btn btn-default" ng-click="addMatch()">Match hinzufügen</button>
@@ -91,13 +93,16 @@
 
                 <tbody>
                 <tr ng-repeat="match in detailed_matches | orderBy:'+startNummer'">
-                    <td><input type="text" id="skiFahrer" name="type" size="40" maxlength="250" class="form-control" placeholder=""
-                               ng-model="match.team1" required></td>
-                    <td><input type="text" id="startNummer" name="type" size="10" maxlength="250" class="form-control" placeholder=""
-                               ng-model="match.result1" required></td>
-                    <td><input type="text" id="fahrtZeit" name="type" size="20" maxlength="250" class="form-control" placeholder=""
-                               ng-model="match.team2" required></td>
-                    <td> <button id="deleteSki" class="btn btn-default" ng-click="delete_selected_match(match._id)">Fahrer löschen</button> <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Fahrer speichern</button></td>
+                    <td> {{match.team1}}</td>
+                    <td> {{match.result1}}</td>
+                    <td> {{match.team2}}</td>
+                    <!--<td><input type="text" id="skiFahrer" name="type" size="40" maxlength="250" class="form-control" placeholder=""-->
+                               <!--ng-model="match.team1" required></td>-->
+                    <!--<td><input type="text" id="startNummer" name="type" size="10" maxlength="250" class="form-control" placeholder=""-->
+                               <!--ng-model="match.result1" required></td>-->
+                    <!--<td><input type="text" id="fahrtZeit" name="type" size="20" maxlength="250" class="form-control" placeholder=""-->
+                               <!--ng-model="match.team2" required></td>-->
+                    <td> <button id="deleteSki" class="btn btn-default" ng-click="delete_selected_match(match._id)">Fahrer löschen</button> <!-- TODO <button id="saveMatch" class="btn btn-default" ng-click="save_selected_match(match._id, match.team1, match.team2, match.result1, match.result2)">Fahrer speichern</button></td>-->
                 </tr>
                 <tr>
                     <td><button id="addSki" class="btn btn-default" ng-click="addMatch()">Fahrer hinzufügen</button>
