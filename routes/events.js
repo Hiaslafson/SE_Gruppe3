@@ -284,8 +284,22 @@ router.route('/:id/deleteMatches')
             if (result1 == result2) {
                 mongoose.model('Event').findOneAndUpdate(
                     {
-                        'points.team': team1,
-                        'points.team': team2,
+                        'points.team': team1
+                    },
+                    {$inc:
+                        {
+                            'points.$.points': -1
+                        }
+                    },
+                    function (err, team) {
+                        if (team != null) {
+                            console.log('TEAM PT: ' + team.points[0].points);
+                        }
+                    }
+                );
+                mongoose.model('Event').findOneAndUpdate(
+                    {
+                        'points.team': team2
                     },
                     {$inc:
                         {
@@ -425,8 +439,23 @@ router.route('/:id/matches')
                 if (result1 == result2) {
                     mongoose.model('Event').findOneAndUpdate(
                         {
-                            'points.team': team1,
-                            'points.team': team2,
+                            'points.team': team1
+                        },
+                        {$inc:
+                            {
+                                'points.$.points': 1
+                            }
+                        },
+                        function (err, team) {
+                            if (team != null) {
+                                console.log('TEAM PT: ' + team.points[0].points);
+                            }
+                        }
+                    );
+
+                    mongoose.model('Event').findOneAndUpdate(
+                        {
+                            'points.team': team2
                         },
                         {$inc:
                             {
