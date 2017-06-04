@@ -55,6 +55,22 @@ router.route('/')
         var info = req.body.info;
         var type = req.body.type;
 
+        var json =  JSON.stringify(req.body);
+        console.log(json);
+        console.log(json.name);
+        console.log(json['name']);
+        console.log("---------------------------------------");
+        console.log(req.body.name);
+        console.log(req.body['name']);
+
+        var arr = eval('(' + json + ')');
+        console.log(arr);
+
+
+        var jsonData = JSON.parse(json);
+
+
+
         //call the create function for our database
         mongoose.model('Event').create({
             name : name,
