@@ -198,36 +198,6 @@ router.route('/:id')
     });
 });
 
-router.route('/:id/edit')
-	//GET the individual event by Mongo ID
-	.get(function(req, res) {
-	    //search for the event within Mongo
-	    mongoose.model('Event').findById(req.id, function (err, event) {
-	        if (err) {
-	            console.log('GET Error: There was a problem retrieving: ' + err);
-	        } else {
-	            //Return the event
-	            console.log('GET Retrieving ID: ' + event._id);
-              var eventeventDate = event.eventDate.toISOString();
-              eventeventDate = eventeventDate.substring(0, eventeventDate.indexOf('T'));
-	            res.format({
-	                //HTML response will render the 'edit.jade' template
-	                html: function(){
-	                       res.render('events/edit', {
-	                          title: 'Event' + event._id,
-                            "eventeventDate" : eventeventDate,
-	                          "event" : event
-	                      });
-	                 },
-	                 //JSON response will return the JSON output
-	                json: function(){
-	                       res.json(event);
-	                 }
-	            });
-	        }
-	    });
-	});
-
 //########################################################################################################################
 //      DELETE EVENT
 //########################################################################################################################
