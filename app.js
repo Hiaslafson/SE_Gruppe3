@@ -1,15 +1,19 @@
-var express = require('express'),
-    path = require('path'),
-    //favicon = require('serve-favicon'),
-    logger = require('morgan'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser');
+var express = require('express');
+var path = require('path');
+//var favicon = require('serve-favicon');
+var logger = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
-var db = require('./model/db'),
-    event = require('./model/events');
+var db = require('./model/db');
+var event = require('./model/events');
+var Account = require('./model/account');
 
-var routes = require('./routes/index'),
-    events = require('./routes/events');
+var routes = require('./routes/index');
+var events = require('./routes/events');
+var users = require('./routes/users');
 
 var app = express();
 
@@ -19,10 +23,27 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require('express-session')({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/events', events);
+//app.use('/login', users);
+
+// passport config
+//var Account = require('./models/account'); -- wurde bereits oben gemacht
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
+
+
 
 // error handlers
 
