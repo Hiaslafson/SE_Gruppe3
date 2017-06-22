@@ -33,7 +33,7 @@
 
 
     <!-- HEADER -->
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse"ng-controller="controller_index">
         <div class="container-fluid">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
@@ -52,7 +52,7 @@
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!--<li ng-if="!isLoggedIn()"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a></li>-->
-                    <li ng-if="isLoggedIn()"><a href='#/login' ng-click='logout()'><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
+                   <li ><a href='#/login' ng-show="isLoggedIn()" ng-click="logout()"><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
                 </ul>
             </div>
         </div>

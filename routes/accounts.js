@@ -36,8 +36,6 @@ router.route('/register')
         });
 });
 
-
-
 router.route('/login')
     .post(function(req, res, next) {
         passport.authenticate('local', function(err, user, info) {
@@ -62,16 +60,12 @@ router.route('/login')
         })(req, res, next);
     });
 
-router.route('logout')
+router.route('/logout')
     .get(function(req, res) {
         req.logout();
         res.status(200).json({
             status: 'Bye!'
         });
     });
-
-router.get('/ping', function(req, res){
-    res.status(200).send("pong!");
-});
 
 module.exports = router;

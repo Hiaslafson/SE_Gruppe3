@@ -230,18 +230,18 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
         $location.path('showDetails/' + response);
     };
 
+    $scope.isLoggedIn = function() {
+        return AuthService.isLoggedIn()
+    };
+
     $scope.logout = function () {
         // call logout from service
         AuthService.logout()
             .then(function () {
-                $location.path('/');
+                $location.path('#/login');
             });
 
     };
-
-    $scope.isLoggedIn = function() {
-        return AuthService.isLoggedIn() == true
-    }
 
 }]);
 
