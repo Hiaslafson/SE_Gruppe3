@@ -51,8 +51,8 @@
                     <li><a href="#/info">Info</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a></li>
-                    <li><a href='#/login' ng-click='logout()'><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
+                    <!--<li ng-if="!isLoggedIn()"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a></li>-->
+                    <li ng-if="isLoggedIn()"><a href='#/login' ng-click='logout()'><span class="glyphicon glyphicon-log-out"></span> LOGOUT</a></li>
                 </ul>
             </div>
         </div>

@@ -2,16 +2,6 @@
 var myApp = angular.module('myApp', ['ngRoute']);
 
 
-myApp.run(function ($rootScope, $location, $route, AuthService) {
-    $rootScope.$on('$routeChangeStart',
-        function (event, next, current) {
-            if (AuthService.isLoggedIn() === false) {
-                $location.path('/login');
-            }
-        });
-});
-
-
 myApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
@@ -19,45 +9,63 @@ myApp.config(['$routeProvider', '$locationProvider',
     $routeProvider
         .when('/login', {
             templateUrl: 'pages/login.html',
-            controller: 'controller_login'
+            controller: 'controller_login',
+            access: {restricted: false}
         })
         .when('/register', {
             templateUrl: 'pages/register.html',
-            controller: 'controller_register'
+            controller: 'controller_register',
+            access: {restricted: false}
         })
         .when('/allEvents', {
             templateUrl: 'pages/allEvents.html',
-            controller: 'controller_index'
+            controller: 'controller_index',
+            access: {restricted: true}
         })
         .when('/showDetails/:param', {
             templateUrl: 'pages/showDetails.html',
-            controller: 'controller_showDetails'
+            controller: 'controller_showDetails',
+            access: {restricted: true}
         })
         .when('/createEvent', {
             templateUrl: 'pages/createEvent.html',
-            controller: 'controller_createEvent'
+            controller: 'controller_createEvent',
+            access: {restricted: true}
         })
         .when('/editEvent/:param', {
             templateUrl: 'pages/editEvent.html',
-            controller: 'controller_editEvent'
+            controller: 'controller_editEvent',
+            access: {restricted: true}
         })
         .when('/addMatch/:param', {
             templateUrl: 'pages/addMatch.html',
-            controller: 'controller_addMatch'
+            controller: 'controller_addMatch',
+            access: {restricted: true}
         })
         .when('/addDriver/:param', {
             templateUrl: 'pages/addDriver.html',
-            controller: 'controller_addMatch'
+            controller: 'controller_addMatch',
+            access: {restricted: true}
         })
         .when('/info', {
             templateUrl: 'pages/info.html',
-            controller: 'controller_index'
+            controller: 'controller_index',
+            access: {restricted: true}
         })
         .otherwise({
-            redirectTo: '/allEvents'//'/allEvents'
+            redirectTo: '/allEvents'
         });
 
 }]);
+
+myApp.run(function ($rootScope, $location, $route, AuthService) {
+    $rootScope.$on('$routeChangeStart',
+        function (event, next, current) {
+            if (AuthService.isLoggedIn() === false && $location.path() != '/login' && $location.path() != '/register') {
+                $location.path('/login');
+            }
+        });
+});
 
 // ----------------------------
 // SERVICE
@@ -122,7 +130,8 @@ myApp.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout,
             .then(
                 // handle success
                 function (data, status) {
-                    if(status === 200 && data.status){
+                    if(data.status === 200){
+                        user = true;
                         deferred.resolve();
                     } else {
                         deferred.reject();
@@ -175,7 +184,7 @@ myApp.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout,
             .then(
                 // handle success
                 function (data, status) {
-                    if(status === 200 && data.status){
+                    if(data.status === 200){
                         deferred.resolve();
                     } else {
                         deferred.reject();
@@ -194,7 +203,6 @@ myApp.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout,
 
 
 }]);
-
 
 // ----------------------------
 // CONTROLLER
@@ -230,6 +238,10 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
             });
 
     };
+
+    $scope.isLoggedIn = function() {
+        return AuthService.isLoggedIn() == true
+    }
 
 }]);
 
@@ -293,7 +305,6 @@ myApp.controller('controller_editEvent', ['$scope', '$http', 'myApp_Service', '$
             });
         }
 }]);
-
 
 myApp.controller('controller_showDetails', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location',
     function($scope, $http, myApp_Service, $routeParams, $location) {
@@ -441,7 +452,6 @@ myApp.controller('controller_login', ['$scope', '$http', 'myApp_Service', '$rout
 
     }]);
 
-
 myApp.controller('controller_register', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location', 'AuthService',
     function($scope, $http, myApp_Service, $routeParams, $location, AuthService) {
 
@@ -462,7 +472,7 @@ myApp.controller('controller_register', ['$scope', '$http', 'myApp_Service', '$r
                 // handle error
                 .catch(function () {
                     $scope.error = true;
-                    $scope.errorMessage = "Something went wrong!";
+                    $scope.errorMessage = "Benutzer existiert bereits";
                     $scope.disabled = false;
                     $scope.registerForm = {};
                 });

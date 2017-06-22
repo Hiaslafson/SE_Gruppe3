@@ -21,23 +21,24 @@ router.use(methodOverride(function(req, res){
 
 router.route('/register')
     .post(function(req, res) {
-        Account.register(new Account({ username: req.body.username }),
-            req.body.password, function(err, account) {
-                if (err) {
-                    return res.status(500).json({
-                        err: err
-                    });
-                }
-                passport.authenticate('local')(req, res, function () {
-                    return res.status(200).json({
-                        status: 'Registration successful!'
-                    });
+    Account.register(new Account({ username: req.body.username }),
+        req.body.password, function(err, account) {
+            if (err) {
+                return res.status(500).json({
+                    err: err
+                });
+            }
+            passport.authenticate('local')(req, res, function () {
+                return res.status(200).json({
+                    status: 'Registration successful!'
                 });
             });
-    });
+        });
+});
 
 
-router.route('login')
+
+router.route('/login')
     .post(function(req, res, next) {
         passport.authenticate('local', function(err, user, info) {
             if (err) {

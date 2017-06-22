@@ -7,22 +7,27 @@
     </div>
 
     <div class="col-md-8 text-left angular-view-style" align="center">
-        <br />
-        <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
-        <form class="form" ng-submit="login()">
-            <div class="form-group">
-                <label>Username</label> <a href="#/register">New member?</a>
-                <input type="text" class="form-control" name="username" ng-model="loginForm.username" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" class="form-control" name="password" ng-model="loginForm.password" required>
-            </div>
-            <div>
-                <button type="submit" class="btn btn-default" ng-disabled="disabled">Login</button>
-            </div>
-        </form>
-
+        <tabs>
+            <pane title="Sign in">
+                <br />
+                <h1>Sign in</h1>
+                <p>Not a member? Please <a href="#/register">register</a> instead.</p>
+                <div ng-show="error" class="alert alert-danger">{{errorMessage}}</div>
+                <form class="form" ng-submit="login()">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" class="form-control" name="username" ng-model="loginForm.username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" class="form-control" name="password" ng-model="loginForm.password" required>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-default" ng-disabled="disabled">Login</button>
+                    </div>
+                </form>
+            </pane>
+        </tabs>
     </div>
 
 
