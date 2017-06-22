@@ -38,7 +38,7 @@ myApp.config(['$routeProvider', '$locationProvider',
             controller: 'controller_index'
         })
         .otherwise({
-            redirectTo: '/allEvents'
+            redirectTo: '/login'//'/allEvents'
         });
 
 }]);
