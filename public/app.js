@@ -7,7 +7,12 @@ myApp.config(['$routeProvider', '$locationProvider',
     $locationProvider.hashPrefix('');
     $routeProvider
         .when('/login', {
-            templateUrl: 'pages/login.html'
+            templateUrl: 'pages/login.html',
+            controller: 'controller_login'
+        })
+        .when('/register', {
+            templateUrl: 'pages/register.html',
+            controller: 'controller_register'
         })
         .when('/allEvents', {
             templateUrl: 'pages/allEvents.html',
@@ -38,7 +43,7 @@ myApp.config(['$routeProvider', '$locationProvider',
             controller: 'controller_index'
         })
         .otherwise({
-            redirectTo: '/login'//'/allEvents'
+            redirectTo: '/allEvents'//'/allEvents'
         });
 
 }]);
@@ -69,11 +74,121 @@ myApp.factory('myApp_Service', ['$rootScope',
     return(this); // !! important
 }]);
 
+myApp.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout, $http) {
+
+    // create user variable
+    var user = null;
+
+    // return available functions for use in the controllers
+    return ({
+        isLoggedIn: isLoggedIn,
+        getUserStatus: getUserStatus,
+        login: login,
+        logout: logout,
+        register: register
+    });
+
+    function isLoggedIn() {
+        if(user) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function getUserStatus() {
+        return user;
+    }
+
+    function login(username, password) {
+
+        // create a new instance of deferred
+        var deferred = $q.defer();
+
+        // send a post request to the server
+        $http.post('/accounts/login',
+            {username: username, password: password})
+            .then(
+                // handle success
+                function (data, status) {
+                    if(status === 200 && data.status){
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                },
+                // handle error
+                function (data) {
+                    deferred.reject();
+                }
+            );
+
+        // return promise object
+        return deferred.promise;
+
+    }
+
+    function logout() {
+
+        // create a new instance of deferred
+        var deferred = $q.defer();
+
+        // send a get request to the server
+        $http.get('/accounts/logout')
+            .then(
+                // handle success
+                function (data) {
+                    user = false;
+                    deferred.resolve();
+                },
+                // handle error
+                function (data) {
+                    user = false;
+                    deferred.reject();
+                }
+            );
+
+        // return promise object
+        return deferred.promise;
+
+    }
+
+    function register(username, password) {
+
+        // create a new instance of deferred
+        var deferred = $q.defer();
+
+        // send a post request to the server
+        $http.post('/accounts/register',
+            {username: username, password: password})
+            .then(
+                // handle success
+                function (data, status) {
+                    if(status === 200 && data.status){
+                        deferred.resolve();
+                    } else {
+                        deferred.reject();
+                    }
+                },
+                // handle error
+                function (data) {
+                    deferred.reject();
+                }
+            );
+
+        // return promise object
+        return deferred.promise;
+
+    }
+
+
+}]);
+
 // ----------------------------
 // CONTROLLER
 // ----------------------------
-myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$location',
-    function($scope, $http, myApp_Service, $location) {
+myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$location', 'AuthService',
+    function($scope, $http, myApp_Service, $location, AuthService) {
 
     // get all Events
     $http.get('/events').then(function(response){
@@ -93,7 +208,16 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
         $scope.abc = 'df';
 
         $location.path('showDetails/' + response);
-    }
+    };
+
+    $scope.logout = function () {
+        // call logout from service
+        AuthService.logout()
+            .then(function () {
+                $location.path('/');
+            });
+
+    };
 
 }]);
 
@@ -276,3 +400,59 @@ myApp.controller('controller_addMatch', ['$scope', '$http', 'myApp_Service', '$r
         };
     }]);
 
+myApp.controller('controller_login', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location', 'AuthService',
+    function($scope, $http, myApp_Service, $routeParams, $location, AuthService) {
+
+        $scope.login = function () {
+
+            // initial values
+            $scope.error = false;
+            $scope.disabled = true;
+
+            // call login from service
+            AuthService.login($scope.loginForm.username, $scope.loginForm.password)
+            // handle success
+                .then(function () {
+                    $location.path('#/allEvents');
+                    $scope.disabled = false;
+                    $scope.loginForm = {};
+                })
+                // handle error
+                .catch(function () {
+                    $scope.error = true;
+                    $scope.errorMessage = "Invalid username and/or password";
+                    $scope.disabled = false;
+                    $scope.loginForm = {};
+                });
+        };
+
+
+    }]);
+
+
+myApp.controller('controller_register', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location', 'AuthService',
+    function($scope, $http, myApp_Service, $routeParams, $location, AuthService) {
+
+        $scope.register = function () {
+
+            // initial values
+            $scope.error = false;
+            $scope.disabled = true;
+
+            // call register from service
+            AuthService.register($scope.registerForm.username, $scope.registerForm.password)
+            // handle success
+                .then(function () {
+                    $location.path('#/login');
+                    $scope.disabled = false;
+                    $scope.registerForm = {};
+                })
+                // handle error
+                .catch(function () {
+                    $scope.error = true;
+                    $scope.errorMessage = "Something went wrong!";
+                    $scope.disabled = false;
+                    $scope.registerForm = {};
+                });
+        };
+    }]);

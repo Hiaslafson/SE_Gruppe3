@@ -13,7 +13,7 @@ var Account = require('./model/account');
 
 var routes = require('./routes/index');
 var events = require('./routes/events');
-//var accounts = require('./routes/accounts');
+var accounts = require('./routes/accounts');
 
 var app = express();
 
@@ -35,7 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/events', events);
-//app.use('/login', users);
+app.use('/accounts', accounts);
 
 // passport config
 //var Account = require('./models/account'); -- wurde bereits oben gemacht
