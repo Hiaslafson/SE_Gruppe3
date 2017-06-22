@@ -13,7 +13,7 @@ var Account = require('./model/account');
 
 var routes = require('./routes/index');
 var events = require('./routes/events');
-var users = require('./routes/users');
+//var accounts = require('./routes/accounts');
 
 var app = express();
 
