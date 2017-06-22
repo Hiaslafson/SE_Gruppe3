@@ -240,8 +240,22 @@ myApp.controller('controller_index', ['$scope', '$http', 'myApp_Service','$locat
             .then(function () {
                 $location.path('#/login');
             });
-
     };
+
+    $scope.activebar = function(dat) {
+
+        if($location.path() == '/allEvents' && dat == 'allEvents') {
+            return('active');
+        }
+        else if($location.path() == '/createEvent' && dat == 'createEvent') {
+            return('active');
+        }
+        else if($location.path() == '/info' && dat == 'info') {
+            return('active');
+        }
+
+        return('');
+    }
 
 }]);
 
@@ -453,21 +467,24 @@ myApp.controller('controller_login', ['$scope', '$http', 'myApp_Service', '$rout
     }]);
 
 myApp.controller('controller_register', ['$scope', '$http', 'myApp_Service', '$routeParams', '$location', 'AuthService',
-    function($scope, $http, myApp_Service, $routeParams, $location, AuthService) {
+    function($scope, $http, myApp_Service, $routeParams, $location, AuthService, $evalAsync) {
 
         $scope.register = function () {
 
             // initial values
             $scope.error = false;
+            $scope.success = false;
             $scope.disabled = true;
 
             // call register from service
             AuthService.register($scope.registerForm.username, $scope.registerForm.password)
             // handle success
                 .then(function () {
-                    $location.path('#/login');
+                    $scope.success = true;
+                    $scope.successMessage = "Benutzer erfolgreich angelegt";
                     $scope.disabled = false;
                     $scope.registerForm = {};
+                    $location.path('#/login');
                 })
                 // handle error
                 .catch(function () {

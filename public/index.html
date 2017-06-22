@@ -46,9 +46,9 @@
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <!--<li class="active"><a href="#">Home</a></li>-->
-                    <li class="active"><a href="#/allEvents">Alle Events</a></li>
-                    <li><a href="#/createEvent">Neues Event</a></li>
-                    <li><a href="#/info">Info</a></li>
+                    <li ng-class="activebar('allEvents')"><a href="#/allEvents">Alle Events</a></li>
+                    <li ng-class="activebar('createEvent')"><a href="#/createEvent">Neues Event</a></li>
+                    <li ng-class="activebar('info')"><a href="#/info">Info</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <!--<li ng-if="!isLoggedIn()"><a href="#/login"><span class="glyphicon glyphicon-log-in"></span> LOGIN</a></li>-->
