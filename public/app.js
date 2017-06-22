@@ -1,6 +1,17 @@
 
 var myApp = angular.module('myApp', ['ngRoute']);
 
+
+myApp.run(function ($rootScope, $location, $route, AuthService) {
+    $rootScope.$on('$routeChangeStart',
+        function (event, next, current) {
+            if (AuthService.isLoggedIn() === false) {
+                $location.path('/login');
+            }
+        });
+});
+
+
 myApp.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
 
@@ -183,6 +194,7 @@ myApp.factory('AuthService', ['$q', '$timeout', '$http', function ($q, $timeout,
 
 
 }]);
+
 
 // ----------------------------
 // CONTROLLER
