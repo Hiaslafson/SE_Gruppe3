@@ -6,6 +6,9 @@ myApp.config(['$routeProvider', '$locationProvider',
 
     $locationProvider.hashPrefix('');
     $routeProvider
+        .when('/login', {
+            templateUrl: 'pages/login.html'
+        })
         .when('/allEvents', {
             templateUrl: 'pages/allEvents.html',
             controller: 'controller_index'
